@@ -9,9 +9,9 @@
                 </p>
                 <div class="flex flex-wrap justify-center items-center content-center gap-4">
                     <a href="{{ route('contact.index') }}" title="Contact Me" class="btn btn-secondary">Contact Me</a>
-                    <a href="{{ config('urls.github') }}" title="GitHub" target="_blank" class="btn btn-secondary">GitHub</a>
-                    <a href="{{ config('urls.linkedin') }}" title="LinkedIn" target="_blank" class="btn btn-secondary">LinkedIn</a>
-                    <a href="{{ config('urls.twitter') }}" title="Twitter" target="_blank" class="btn btn-secondary">Twitter</a>
+                    <a href="{{ config('content.social.github.url') }}" title="GitHub" target="_blank" class="btn btn-secondary">GitHub</a>
+                    <a href="{{ config('content.social.linkedin.url') }}" title="LinkedIn" target="_blank" class="btn btn-secondary">LinkedIn</a>
+                    <a href="{{ config('content.social.twitter.url') }}" title="Twitter" target="_blank" class="btn btn-secondary">Twitter</a>
                 </div>
             </div>
         </div>

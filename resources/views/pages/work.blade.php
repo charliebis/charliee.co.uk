@@ -13,7 +13,7 @@
             </p>
             <div class="flex flex-wrap justify-center items-center content-center gap-4">
                 <a href="{{ route('contact.index') }}" title="Contact Me" class="btn btn-secondary">Contact Me</a>
-                <a href="{{ config('urls.github') }}" title="GitHub" target="_blank" class="btn btn-secondary">GitHub</a>
+                <a href="{{ config('content.social.github.url') }}" title="GitHub" target="_blank" class="btn btn-secondary">GitHub</a>
             </div>
         </div>
     </div>
@@ -105,10 +105,10 @@
 </section>
 <section class="container flex gap-5 items-stretch justify-center justify-items-center mx-auto mt-16 mb-5">
     <div class="flex flex-wrap justify-center items-center content-center gap-4">
-        <button class="btn btn-secondary">Contact Me</button>
-        <button class="btn btn-secondary">GitHub</button>
-        <button class="btn btn-secondary">LinkedIn</button>
-        <button class="btn btn-secondary">Twitter</button>
+        <a href="{{ route('contact.index') }}" title="Contact Me" class="btn btn-secondary">Contact Me</a>
+        <a href="{{ config('content.social.github.url') }}" title="GitHub" target="_blank" class="btn btn-secondary">GitHub</a>
+        <a href="{{ config('content.social.linkedin.url') }}" title="LinkedIn" target="_blank" class="btn btn-secondary">LinkedIn</a>
+        <a href="{{ config('content.social.twitter.url') }}" title="Twitter" target="_blank" class="btn btn-secondary">Twitter</a>
     </div>
 </section>
 @stop
