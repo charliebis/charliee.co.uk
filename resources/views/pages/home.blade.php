@@ -35,7 +35,7 @@
     <div class="flex-grow bg-primary text-primary-content rounded-box place-items-center p-8 mx-3 2xl:mx-0">
         <h2 class="text-center text-base-content font-bold text-2xl mb-6">Core Skills</h2>
         <ul class="list-disc pl-4 text-lg lg:text-xl">
-            <li class="mb-3">Full-stack web development, including experience in custom tracking, reporting, content management systems (CMS), API platforms, mobile optimization, and search engine optimisation (SEO). My experience spans a wide range of areas, enabling me to deliver comprehensive solutions that meet diverse project requirements.</li>
+            <li class="mb-3">Full-stack web development, including experience in custom tracking, reporting, content management systems (CMS), API platforms, mobile optimisation, and search engine optimisation (SEO). My experience spans a wide range of areas, enabling me to deliver comprehensive solutions that meet diverse project requirements.</li>
             <li class="mb-3">Languages, frameworks, systems, patterns including PHP, Laravel, Zend, Javascript/JQuery/AJAX, HTML, CSS, Tailwind, SQL, XML, REST, JSON, MVC.</li>
             <li class="mb-3">Proficiency with web and related technologies, including Linux, Apache/Nginx, MySQL/MariaDB, PostgreSQL, AWS, Docker, CloudFlare, Wordpress, Google apps including Search Console, Analytics, Workspace, Tag Manager, Postmaster tools.</li>
             <li class="mb-3">I possess a solid understanding of Affiliate Marketing concepts, platforms, and integrations, and have worked extensively with price comparison, voucher codes, and deals sites.</li>
