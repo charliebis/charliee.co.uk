@@ -22,7 +22,7 @@
     <section class="container max-w-5xl flex gap-5 items-center justify-center justify-items-center mx-auto -mt-36 mb-5">
         <div class="w-full flex-grow bg-primary text-primary-content rounded-box place-items-center p-8 mx-3 2xl:mx-0">
             @if(!empty($success))
-                <div class="alert alert-success w-4/5 mx-auto mb-8 mt-20">
+                <div class="alert alert-success w-4/5 mx-auto mb-8 mt-8">
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     <span class="text-success-content">{{ $success }}</span>
                 </div>
