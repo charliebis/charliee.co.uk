@@ -91,15 +91,6 @@ return [
     */
     'stack'        =>
         [
-            'docker'   => [
-                'url'  => 'https://www.docker.com/',
-                'icon' => [
-                    'type' => 'img',
-                    'path' => '/img/stack/docker.png',
-                    'width' => 100
-                ],
-                'alt'  => 'Docker'
-            ],
             'laravel'  => [
                 'url'  => 'https://laravel.com/',
                 'icon' => [
