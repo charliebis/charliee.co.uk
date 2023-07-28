@@ -1,4 +1,5 @@
 @extends('layouts.default')
+@section('title', 'Contact Me | ' . config('app.name'))
 @section('content')
 
     <section class="hero min-h-16 bg-base-200 pb-36">

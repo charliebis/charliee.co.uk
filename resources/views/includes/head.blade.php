@@ -13,16 +13,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>Charles Edwards | Software Engineer</title>
+<title>@yield('title', config('app.name'))</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=block&family=Inter&display=swap">
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 <link rel="shortcut icon" href="/img/charlie_icon_32.png" type="image/png"/>
-<link rel="canonical" href="https://charliee.co.uk/"/>
-<link rel="index" title="Charles Edwards | Software Engineer" href="https://charliee.co.uk"/>
+<link rel="canonical" href="{{ config('app.url') }}"/>
+<link rel="index" title="@yield('title', config('app.name'))" href="{{ config('app.url') }}"/>
 
-<meta property="og:site_name" content="Charles Edwards">
-<meta property="og:title" content="Charles Edwards | Software Engineer"/>
+<meta property="og:site_name" content="{{ config('app.name') }}">
+<meta property="og:title" content="@yield('title', config('app.name'))"/>
 <meta property="og:type" content="website"/>
 <meta property="og:description" content="Software Engineer with over 20 years of experience in building and maintaining websites and applications, based in Leighton Buzzard, UK.">
 
@@ -32,7 +32,7 @@
 <meta property="og:image:width" content="200" />
 <meta property="og:image:height" content="200" />
 <meta property="og:image:alt" content="Charles Edwards" />
-<meta property="og:url" content="https://charliee.co.uk/"/>
+<meta property="og:url" content="{{ config('app.url') }}"/>
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@CAEdwards82">
