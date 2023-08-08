@@ -38,6 +38,6 @@
             Charles Edwards<br/>
             Software Engineer | Leighton Buzzard, U.K.
         </p>
-        <p>Copyright © {{ date('Y') }} - All right reserved</p>
+        <p>Copyright © {{ date('Y') }} - All rights reserved</p>
     </div>
 </footer>
