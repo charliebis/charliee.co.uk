@@ -11,6 +11,7 @@ class HomeController extends Controller
     public function _construct()
     {
         //  Testing gitlab runner
+        //  Testing gitlab runner 2
     }
 
 
