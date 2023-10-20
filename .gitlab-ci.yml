@@ -69,9 +69,14 @@ build-job:
     - echo "Decrypting .env file(s)"
     - php artisan env:decrypt --key=$DECRYPTION_KEY_ENV
     - php artisan env:decrypt --env=production --key=$DECRYPTION_KEY_ENV_PRODUCTION
+    - php artisan cache:clear
+    - php artisan config:clear
     - php artisan config:cache
+    - php artisan event:clear
     - php artisan event:cache
+    - php artisan route:clear
     - php artisan route:cache
+    - php artisan view:clear
     - php artisan view:cache
     - echo 'Build directory contents'
     - ls -la
