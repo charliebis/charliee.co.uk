@@ -62,8 +62,8 @@ build-job:
     - echo 'Current directory:'
     - pwd
     # Inject .env and .env.production files using CI/CD variables
-    - echo "$CI_ENV_VARS" > .env
-    - echo "$CI_ENV_VARS_PRODUCTION" > .env.production
+    - cp $CI_ENV_VARS .env
+    - cp $CI_ENV_VARS_PRODUCTION .env.production
     - echo 'Build directory contents'
     - ls -la
     - cat .env
