@@ -21,7 +21,7 @@ build-job:
   before_script:
     - echo "build-job > before_script script started. Preparing build environment:"
     - echo "Installing OpenSSH, Git and PHP-CLI"
-    - apt-get update -y && apt-get install openssh-client git php-cli -y
+    - apt-get update -y && apt-get install openssh-client git php-cli php-bcmath php-curl php-json php-mbstring php-mysql php-tokenizer php-xml php-zip -y
     ## Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
     ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
@@ -61,13 +61,15 @@ build-job:
     - composer -V
     - echo 'Current directory:'
     - pwd
+    - composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
+    - npm install
+    - npm run prod
     # Inject .env and .env.production files using CI/CD variables
-    - cp $CI_ENV_VARS .env
-    - cp $CI_ENV_VARS_PRODUCTION .env.production
+    - echo "Decrypting .env file(s)"
+    - php artisan env:decrypt --key=$DECRYPTION_KEY_ENV
+    - php artisan env:decrypt --key=$DECRYPTION_KEY_ENV_PRODUCTION
     - echo 'Build directory contents'
     - ls -la
-    - cat .env
-    - cat .env.production
 
 
 # This job runs in the test stage.
