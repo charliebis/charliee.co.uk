@@ -64,6 +64,11 @@ build-job:
     - echo "Cloning repository from $CI_REPOSITORY_URL ./$VERSION"
     - echo 'Directory contents'
     - ls -la
+    - cd ..
+    - echo 'Parent Directory'
+    - pwd
+    - echo 'Parent Directory contents'
+    - ls -la
 
 
 # This job runs in the test stage.
