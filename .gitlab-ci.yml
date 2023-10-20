@@ -59,7 +59,7 @@ build-job:
     - php -v
     - echo "Composer version:"
     - composer -V
-    - echo 'Current directory:"
+    - echo 'Current directory:'
     - pwd
     - echo "Cloning repository from $CI_REPOSITORY_URL ./$APP_NAME/$VERSION"
 
