@@ -63,7 +63,7 @@ build-job:
     - pwd
     - echo "Cloning repository from $CI_REPOSITORY_URL ./$VERSION"
     - echo 'Directory contents'
-    - ls -la ./$VERSION
+    - ls -la
 
 
 # This job runs in the test stage.
