@@ -61,11 +61,13 @@ build-job:
     - composer -V
     - echo 'Current directory:'
     - pwd
-    - echo 'Build directory contents'
-    - ls -la
     # Inject .env and .env.production files using CI/CD variables
     - echo "$CI_ENV_VARS" > .env
     - echo "$CI_ENV_VARS_PRODUCTION" > .env.production
+    - echo 'Build directory contents'
+    - ls -la
+    - cat .env
+    - cat .env.production
 
 
 # This job runs in the test stage.
