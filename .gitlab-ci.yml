@@ -19,11 +19,13 @@ stages:
 build-job:
   stage: build
   before_script:
-    - echo "build-job before_script script running"
+    - echo "build-job > before_script script started. Node and NPM should already be installed:"
     - echo "Node version:"
     - node -v
     - echo "NPM version:"
     - npm -v
+    - echo "Installing OpenSSH, Git and PHP-CLI
+    - apt-get update -y && apt-get install openssh-client git php-cli -y
 
   script:
     - echo "build-job script script running"
