@@ -61,7 +61,7 @@ build-job:
     - composer -V
     - echo 'Current directory:'
     - pwd
-    - echo "Cloning repository from $CI_REPOSITORY_URL ./$VERSION"
+    - echo "Cloning repository from $CI_REPOSITORY_URL"
     - echo 'Directory contents'
     - ls -la
     - cd ..
