@@ -62,12 +62,11 @@ build-job:
     - echo 'Current directory:'
     - pwd
     # Inject .env and .env.production files using CI/CD variables
-    - cp $CI_ENV_VARS .env
-    - cp $CI_ENV_VARS_PRODUCTION .env.production
+    - echo "Decrypting .env file(s)"
+    - php artisan env:decrypt --key=$DECRYPTION_KEY_ENV
+    - php artisan env:decrypt --key=$DECRYPTION_KEY_ENV_PRODUCTION
     - echo 'Build directory contents'
     - ls -la
-    - cat .env
-    - cat .env.production
 
 
 # This job runs in the test stage.
