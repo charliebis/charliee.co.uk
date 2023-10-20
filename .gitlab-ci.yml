@@ -61,6 +61,7 @@ build-job:
     - composer -V
     - echo 'Current directory:'
     - pwd
+    - cp $VITE_CONFIG ./vite.config.js
     - composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
     - npm install
     - echo 'Build directory contents'
