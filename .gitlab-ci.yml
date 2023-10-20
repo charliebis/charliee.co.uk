@@ -61,13 +61,15 @@ build-job:
     - composer -V
     - echo 'Current directory:'
     - pwd
-    # Inject .env and .env.production files using CI/CD variables
-    - echo "Decrypting .env file(s)"
-    - php artisan env:decrypt --key=$DECRYPTION_KEY_ENV
-    - php artisan env:decrypt --key=$DECRYPTION_KEY_ENV_PRODUCTION
     - composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
     - npm install
+    - echo 'Build directory contents'
+    - ls -la
     - npm run prod
+    # Inject .env and .env.production files using CI/CD variables
+    #- echo "Decrypting .env file(s)"
+    #- php artisan env:decrypt --key=$DECRYPTION_KEY_ENV
+    #- php artisan env:decrypt --key=$DECRYPTION_KEY_ENV_PRODUCTION
     - echo 'Build directory contents'
     - ls -la
 
