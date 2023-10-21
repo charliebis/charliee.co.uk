@@ -69,6 +69,8 @@ build-job:
     - echo "Decrypting .env file(s)"
     - php artisan env:decrypt --key=$DECRYPTION_KEY_ENV
     - php artisan env:decrypt --env=production --key=$DECRYPTION_KEY_ENV_PRODUCTION
+    - find ./ -type f -exec chmod 644 {} \;
+    - find ./ -type d -exec chmod 755 {} \;
     - php artisan cache:clear
     - php artisan config:clear
     - php artisan config:cache
