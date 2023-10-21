@@ -76,8 +76,9 @@ build-job:
     - php artisan event:cache
     - php artisan route:clear
     - php artisan route:cache
-    - php artisan view:clear
-    - php artisan view:cache
+    - ls -la ./storage/framework/
+    #- php artisan view:clear
+    #- php artisan view:cache
     - echo 'Build directory contents'
     - ls -la
 
