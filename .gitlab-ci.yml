@@ -76,6 +76,7 @@ build-job:
     - php artisan event:cache
     - php artisan route:clear
     - php artisan route:cache
+    - ls -la ./storage/
     - ls -la ./storage/framework/
     #- php artisan view:clear
     #- php artisan view:cache
