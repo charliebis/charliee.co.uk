@@ -107,6 +107,8 @@ deploy-job:
     - echo "deploy-job script is now running"
     - echo 'Build directory contents at start of deploy-job'
     - ls -la
+    - echo 'Known hosts'
+    - cat ~/.ssh/known_hosts
     # Copy built code to a new directory on the deployment server
     - scp -r ./* gitlab-ci@$IP_SERVER_PRODUCTION:$NEW_VERSION_DIR
   after_script:
