@@ -3,7 +3,7 @@ image: node:latest
 default:
   tags:
     - laravel
-  cache:
+  artifacts:
     paths:
       - vendor/
       - node_modules/
