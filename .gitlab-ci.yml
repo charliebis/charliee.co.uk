@@ -118,7 +118,7 @@ deploy-job:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_ed25519_gitlab_deploy
-    - chmod 600 ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519_gitlab_deploy
     ## Use ssh-keyscan to scan the keys of your private server. Replace gitlab.com
     ## with your own domain name. You can copy and repeat that command if you have
     ## more than one server to connect to.
