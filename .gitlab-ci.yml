@@ -6,7 +6,8 @@ default:
 
 variables:
   VERSION: $CI_COMMIT_SHA
-  NEW_VERSION_DIR: "/var/www/$APP_NAME/$VERSION"
+  #NEW_VERSION_DIR: "/var/www/$APP_NAME/$VERSION"
+  NEW_VERSION_DIR: "~/projects/$APP_PATH/$APP_NAME/$VERSION"
   PREVIOUS_VERSION_DIR: "/var/www/$APP_NAME/previous"
 
 # List of stages for jobs, and their order of execution
@@ -104,5 +105,7 @@ deploy-job:
   stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - echo "deploy-job script is now running"
+    # Copy built code to a new directory on the deployment server
+    - scp -r ./* gitlab-ci@$IP_SERVER_PRODUCTION:$NEW_VERSION_DIR
   after_script:
     - echo "deploy-job after_script is now running"
