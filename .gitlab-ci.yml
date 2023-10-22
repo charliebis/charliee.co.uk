@@ -21,8 +21,8 @@ build-job:
   stage: build
   before_script:
     - echo "build-job > before_script script started. Preparing build environment:"
-    - echo "Installing OpenSSH, Git and PHP-CLI"
-    - apt-get update -y && apt-get install openssh-client git php-cli php-bcmath php-curl php-json php-mbstring php-mysql php-tokenizer php-xml php-zip -y
+    - echo "Installing PHP"
+    - apt-get update -y && apt-get install php-cli php-bcmath php-curl php-json php-mbstring php-mysql php-tokenizer php-xml php-zip -y
     ## Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
     ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
@@ -42,8 +42,8 @@ build-job:
     - chmod 644 ~/.ssh/known_hosts
     ## Optionally, if you will be using any Git commands, set the user name and
     ## email.
-    - git config --global user.email gitlab-deploy@charliee.co.uk
-    - git config --global user.name "Gitlab Deploy"
+    #- git config --global user.email gitlab-deploy@charliee.co.uk
+    #- git config --global user.name "Gitlab Deploy"
     ## Composer
     - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     - php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
@@ -103,13 +103,34 @@ lint-test-job:
 # This job runs in the deploy stage.
 deploy-job:
   stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
+  before_script:
+    - echo "deploy-job > before_script script started:"
+    - echo "Installing OpenSSH"
+    - apt-get update -y && apt-get install openssh-client -y
+    ## Run ssh-agent (inside the build environment)
+    - eval $(ssh-agent -s)
+    ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+    ## We're using tr to fix line endings which makes ed25519 keys work
+    ## without extra base64 encoding.
+    ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    ## Create the SSH directory and give it the right permissions
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_ed25519_gitlab_deploy
+    - chmod 600 ~/.ssh/id_ed25519
+    ## Use ssh-keyscan to scan the keys of your private server. Replace gitlab.com
+    ## with your own domain name. You can copy and repeat that command if you have
+    ## more than one server to connect to.
+    - ssh-keyscan -H $IP_SERVER_PRODUCTION >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
-    - echo "deploy-job script is now running"
+    - echo "deploy-job > script script started:"
     - echo 'Build directory contents at start of deploy-job'
     - ls -la
     - echo 'Known hosts'
     - cat ~/.ssh/known_hosts
     # Copy built code to a new directory on the deployment server
-    - scp -r ./* gitlab-ci@$IP_SERVER_PRODUCTION:$NEW_VERSION_DIR
+    #- scp -r ./* gitlab-ci@$IP_SERVER_PRODUCTION:$NEW_VERSION_DIR
   after_script:
-    - echo "deploy-job after_script is now running"
+    - echo "deploy-job > after_script script started:"
