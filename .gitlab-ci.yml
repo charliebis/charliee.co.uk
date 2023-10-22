@@ -3,20 +3,19 @@ image: node:latest
 default:
   tags:
     - laravel
+  cache:
+    paths:
+      - vendor/
+      - node_modules/
+      - vite.config.js
+      - .env
+      - .env.production
 
 variables:
   VERSION: $CI_COMMIT_SHA
   #NEW_VERSION_DIR: "/var/www/$APP_NAME/$VERSION"
   NEW_VERSION_DIR: "~/projects/$APP_PATH/$APP_NAME/$VERSION"
   PREVIOUS_VERSION_DIR: "/var/www/$APP_NAME/previous"
-
-cache:
-  paths:
-    - vendor/
-    - node_modules/
-    - vite.config.js
-    - .env
-    - .env.production
 
 # List of stages for jobs, and their order of execution
 stages:
@@ -123,6 +122,6 @@ deploy-job:
     - cat ~/.ssh/known_hosts
     # Copy built code to a new directory on the deployment server
     #- scp -r ./* gitlab-ci@$IP_SERVER_PRODUCTION:$NEW_VERSION_DIR
-    - echo "CI_COMMIT_REF_SLUG is: $CI_COMMIT_REF_SLUG"
+    - echo "CI_COMMIT_REF_SLUG is:" $CI_COMMIT_REF_SLUG
   after_script:
     - echo "deploy-job > after_script script started:"
