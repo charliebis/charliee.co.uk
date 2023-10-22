@@ -38,7 +38,7 @@ build-job:
     ## Use ssh-keyscan to scan the keys of your private server. Replace gitlab.com
     ## with your own domain name. You can copy and repeat that command if you have
     ## more than one server to connect to.
-    - ssh-keyscan $IP_SERVER_PRODUCTION >> ~/.ssh/known_hosts
+    - ssh-keyscan -H $IP_SERVER_PRODUCTION >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     ## Optionally, if you will be using any Git commands, set the user name and
     ## email.
