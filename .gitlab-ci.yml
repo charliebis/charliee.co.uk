@@ -116,7 +116,7 @@ deploy-job:
     - chmod 644 ~/.ssh/known_hosts
     # Delete unnecessary files
     - rm .env.example .env.encrypted .env.production.encrypted
-    - find . -type d -name .git -exec rm -rf {} \;
+    #- find . -type d -name .git -exec rm -rf {} \;
     - find . -type f -name .gitignore -exec rm -f {} \;
   script:
     - echo "deploy-job > script script started:"
