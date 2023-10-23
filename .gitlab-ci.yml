@@ -128,9 +128,12 @@ deploy-production:
     ## more than one server to connect to.
     - ssh-keyscan -H $IP_SERVER_PRODUCTION >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    ## Delete unnecessary files
-    #- rm .env.example .env.encrypted .env.production.encrypted .gitignore .gitattributes
-    #- rm -rf .git
+    # Delete unnecessary files
+    - rm .env.example .env.encrypted .env.production.encrypted .gitignore .gitattributes
+    - rm -rf .git
+    # Set correct file and dir permissions
+    - find ./ -type f -exec chmod 644 {} \;
+    - find ./ -type d -exec chmod 755 {} \;
   script:
     - echo "deploy-production > script script started:"
     - echo 'Build directory contents at start of deploy-production'
