@@ -108,7 +108,7 @@ deploy-production:
     - main
     - master
   before_script:
-    - echo "deploy-job > before_script script started:"
+    - echo "deploy-production > before_script script started:"
     - echo "Installing OpenSSH"
     - apt-get update -y && apt-get install openssh-client -y
     ## Run ssh-agent (inside the build environment)
@@ -130,12 +130,13 @@ deploy-production:
     - chmod 644 ~/.ssh/known_hosts
     # Delete unnecessary files
     - rm .env.example .env.encrypted .env.production.encrypted
-    - find . -name ".git" -exec rm -rf {} \; 2>/dev/null
-    - find . -type f -name .gitignore -exec rm -f {} \; 2>/dev/null
-    - find . -type f -name .gitattributes -exec rm -f {} \; 2>/dev/null
+    #- find . -name ".git" -exec rm -rf {} \; 2>/dev/null
+    #- find . -type f -name .gitignore -exec rm -f {} \; 2>/dev/null
+    #- find . -type f -name .gitattributes -exec rm -f {} \; 2>/dev/null
+    - echo 'Foobar'
   script:
-    - echo "deploy-job > script script started:"
-    - echo 'Build directory contents at start of deploy-job'
+    - echo "deploy-production > script script started:"
+    - echo 'Build directory contents at start of deploy-production'
     - ls -la
     - echo 'Known hosts'
     - cat ~/.ssh/known_hosts
@@ -143,4 +144,4 @@ deploy-production:
     - scp -r . gitlab-ci@$IP_SERVER_PRODUCTION:$NEW_VERSION_DIR
     # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
   after_script:
-    - echo "deploy-job > after_script script started:"
+    - echo "deploy-production > after_script script started:"
