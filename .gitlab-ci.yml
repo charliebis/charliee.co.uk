@@ -127,7 +127,7 @@ deploy-job:
     - echo 'Known hosts'
     - cat ~/.ssh/known_hosts
     # Copy built code to a new directory on the deployment server
-    - scp -r ./* gitlab-ci@$IP_SERVER_PRODUCTION:$NEW_VERSION_DIR
+    - scp -r . gitlab-ci@$IP_SERVER_PRODUCTION:$NEW_VERSION_DIR
     # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
   after_script:
     - echo "deploy-job > after_script script started:"
