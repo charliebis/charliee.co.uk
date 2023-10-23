@@ -115,8 +115,9 @@ deploy-job:
     - ssh-keyscan -H $IP_SERVER_PRODUCTION >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     # Delete unnecessary files
-    - rm .env.example .env.encrypted .env.production.encrypted
+    - rm .env.example .env.encrypted .env.production.encrypted .gitattributes .gitlab-ci.yml
     #- find . -type d -name .git -exec rm -rf {} \;
+    - rm -rf .git
     - find . -type f -name .gitignore -exec rm -f {} \;
   script:
     - echo "deploy-job > script script started:"
