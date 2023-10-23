@@ -66,17 +66,9 @@ build-job:
     - php artisan env:decrypt --env=production --key=$DECRYPTION_KEY_ENV_PRODUCTION
     #- chmod -R 775 storage
     #- chmod -R 775 bootstrap/cache
-    #- php artisan config:clear
-    #- php artisan config:cache
-    #- php artisan cache:clear
-    #- php artisan event:clear
-    #- php artisan route:clear
-    #- php artisan event:cache
-    #- php artisan route:cache
+
     #- ls -la ./storage/
     #- ls -la ./storage/framework/
-    #- php artisan view:clear
-    #- php artisan view:cache
     - echo 'Build directory contents'
     - ls -la
 
@@ -142,6 +134,15 @@ deploy-production:
     - cat ~/.ssh/known_hosts
     # Copy built code to a new directory on the deployment server
     - scp -r . gitlab-ci@$IP_SERVER_PRODUCTION:$NEW_VERSION_DIR
+    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "php artisan config:clear"
+    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "php artisan config:cache"
+    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "php artisan cache:clear"
+    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "php artisan event:clear"
+    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "php artisan route:clear"
+    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "php artisan event:cache"
+    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "php artisan route:cache"
+    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "php artisan view:clear"
+    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "php artisan view:cache"
     # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
   after_script:
     - echo "deploy-production > after_script script started:"
