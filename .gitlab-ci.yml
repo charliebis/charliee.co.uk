@@ -129,11 +129,8 @@ deploy-production:
     - ssh-keyscan -H $IP_SERVER_PRODUCTION >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     # Delete unnecessary files
-    - rm .env.example .env.encrypted .env.production.encrypted
-    - find . -name ".git" -exec rm -rf {} \; 2>/dev/null; true
-    #- find . -type f -name .gitignore -exec rm -f {} \; 2>/dev/null
-    #- find . -type f -name .gitattributes -exec rm -f {} \; 2>/dev/null
-    - echo 'Foobar'
+    - rm .env.example .env.encrypted .env.production.encrypted .gitignore .gitattributes
+    - rm -rf .git
   script:
     - echo "deploy-production > script script started:"
     - echo 'Build directory contents at start of deploy-production'
