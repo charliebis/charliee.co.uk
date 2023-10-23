@@ -3,9 +3,6 @@ image: node:latest
 default:
   tags:
     - laravel
-  only:
-    - "main"
-    - "master"
   artifacts:
     paths:
       - vendor/
@@ -29,6 +26,10 @@ stages:
 # This job runs in the build stage, which runs first.
 build-job:
   stage: build
+  only:
+    - main
+    - master
+    - staging
   before_script:
     - echo "build-job > before_script script started. Preparing build environment:"
     - echo "Installing PHP"
@@ -83,19 +84,29 @@ build-job:
 # This job runs in the test stage.
 unit-test-job:
   stage: test # It only starts when the job in the build stage completes successfully.
+  only:
+    - main
+    - master
+    - staging
   script:
     - echo "stage unit-test-job script is now running"
 
 # This job also runs in the test stage.
 lint-test-job:
   stage: test # It can run at the same time as unit-test-job (in parallel).
+  only:
+    - main
+    - master
+    - staging
   script:
     - echo "stage lint-test-job script is now running"
 
-
 # This job runs in the deploy stage.
-deploy-job:
+deploy-production:
   stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
+  only:
+    - main
+    - master
   before_script:
     - echo "deploy-job > before_script script started:"
     - echo "Installing OpenSSH"
