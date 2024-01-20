@@ -14,7 +14,7 @@ default:
 variables:
   VERSION: $CI_COMMIT_SHA
   #DEPLOY_DIR: "/var/www/$APP_NAME/$VERSION"
-  DEPLOY_DIR: "~/projects/$APP_PATH/$APP_NAME/$VERSION"
+  DEPLOY_DIR: "~/projects/$APP_PATH/$APP_NAME"
 
 # List of stages for jobs, and their order of execution
 stages:
