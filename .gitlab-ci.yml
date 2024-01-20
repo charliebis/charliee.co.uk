@@ -13,9 +13,8 @@ default:
 
 variables:
   VERSION: $CI_COMMIT_SHA
-  #NEW_VERSION_DIR: "/var/www/$APP_NAME/$VERSION"
-  NEW_VERSION_DIR: "~/projects/$APP_PATH/$APP_NAME/$VERSION"
-  PREVIOUS_VERSION_DIR: "/var/www/$APP_NAME/previous"
+  #DEPLOY_DIR: "/var/www/$APP_NAME/$VERSION"
+  DEPLOY_DIR: "~/projects/$APP_PATH/$APP_NAME/$VERSION"
 
 # List of stages for jobs, and their order of execution
 stages:
@@ -31,7 +30,7 @@ build-job:
     - master
     - staging
   before_script:
-    - echo "build-job > before_script script started. Preparing build environment:"
+    - echo "build-job > before_script started. Preparing build environment:"
     - echo "Installing PHP"
     - apt-get update -y && apt-get install php-cli php-bcmath php-curl php-json php-mbstring php-mysql php-tokenizer php-xml php-zip -y
     ## Optionally, if you will be using any Git commands, set the user name and
@@ -45,7 +44,7 @@ build-job:
     - php -r "unlink('composer-setup.php');"
     - mv composer.phar /usr/local/bin/composer
   script:
-    - echo "build-job > before_script script started. Checking build environment:"
+    - echo "build-job > script started. Checking build environment:"
     - echo "Node version:"
     - node -v
     - echo "NPM version:"
@@ -56,14 +55,17 @@ build-job:
     - composer -V
     - echo 'Current directory:'
     - pwd
-    - cp $VITE_CONFIG ./vite.config.js
     - composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
     - npm install
     - npm run prod
     # Inject .env and .env.production files using CI/CD variables
-    - echo "Decrypting .env file(s)"
-    - php artisan env:decrypt --key=$DECRYPTION_KEY_ENV
-    - php artisan env:decrypt --env=production --key=$DECRYPTION_KEY_ENV_PRODUCTION
+    - cp $CI_ENV_VARS ./.env
+    - cp $CI_ENV_VARS_PRODUCTION ./.env.production
+    # Create a text file with the version hash
+    - echo $VERSION > .version
+    #- echo "Decrypting .env file(s)"
+    #- php artisan env:decrypt --key=$DECRYPTION_KEY_ENV
+    #- php artisan env:decrypt --env=production --key=$DECRYPTION_KEY_ENV_PRODUCTION
     #- chmod -R 775 storage
     #- chmod -R 775 bootstrap/cache
 
@@ -118,31 +120,32 @@ deploy-production:
     ## Use ssh-keyscan to scan the keys of your private server. Replace gitlab.com
     ## with your own domain name. You can copy and repeat that command if you have
     ## more than one server to connect to.
-    - ssh-keyscan -H $IP_SERVER_PRODUCTION >> ~/.ssh/known_hosts
+    - ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     # Delete unnecessary files
     - rm .env.example .env.encrypted .env.production.encrypted .gitignore .gitattributes
     - rm -rf .git
     # Set correct file and dir permissions
-    - find ./ -type f -exec chmod 644 {} \;
-    - find ./ -type d -exec chmod 755 {} \;
+    - find ./ -type f -exec chmod 664 {} \;
+    - find ./ -type d -exec chmod 775 {} \;
   script:
     - echo "deploy-production > script script started:"
     - echo 'Build directory contents at start of deploy-production'
     - ls -la
     - echo 'Known hosts'
     - cat ~/.ssh/known_hosts
+    # Put remote site into maintenance mode
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan down"
     # Copy built code to a new directory on the deployment server
-    - scp -r . gitlab-ci@$IP_SERVER_PRODUCTION:$NEW_VERSION_DIR
-    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "cd $NEW_VERSION_DIR && php artisan config:clear"
-    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "cd $NEW_VERSION_DIR && php artisan config:cache"
-    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "cd $NEW_VERSION_DIR && php artisan cache:clear"
-    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "cd $NEW_VERSION_DIR && php artisan event:clear"
-    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "cd $NEW_VERSION_DIR && php artisan route:clear"
-    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "cd $NEW_VERSION_DIR && php artisan event:cache"
-    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "cd $NEW_VERSION_DIR && php artisan route:cache"
-    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "cd $NEW_VERSION_DIR && php artisan view:clear"
-    - ssh gitlab-ci@$IP_SERVER_PRODUCTION "cd $NEW_VERSION_DIR && php artisan view:cache"
+    - rsync --progress -ogr ./ gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR
+    #- scp -r . gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan optimize:clear"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan config:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan event:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan route:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan view:cache"
+    # Take remote site out of maintenance mode
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan up"
     # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
   after_script:
     - echo "deploy-production > after_script script started:"

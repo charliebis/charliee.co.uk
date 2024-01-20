@@ -58,7 +58,9 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
-    'google_tag_manager_id' => env('GTM_SITE_ID'),
+    'gtm' => [
+        'site_id' => env('GTM_SITE_ID'),
+    ],
 
     /*
     |--------------------------------------------------------------------------
