@@ -29,4 +29,3 @@ web.dockerfile
 docker-compose.yml
 vhost.conf
 setup.sh
-vite.config.js
