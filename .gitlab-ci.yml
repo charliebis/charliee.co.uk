@@ -158,7 +158,7 @@ deploy-production:
     - |
       echo "
       if [ -d $DEPLOY_DIR_BASE/live ]; then
-        if [ -n \"\$(ls -A $DEPLOY_DIR_BASE/live)\" ] && [ \$(ls -d $DEPLOY_DIR_BASE/live/* | grep ^d | wc -l) -eq 1 ]; then
+        if [ -n \"\$(ls -A $DEPLOY_DIR_BASE/live)\" ] && [ \$(find $DEPLOY_DIR_BASE/live/* -maxdepth 0 -type d | wc -l) -eq 1 ]; then
           PREVIOUS_VERSION=\$(ls -d $DEPLOY_DIR_BASE/live/*/)
           PREVIOUS_VERSION=\${PREVIOUS_VERSION%?}
           PREVIOUS_VERSION=\${PREVIOUS_VERSION##*/}
