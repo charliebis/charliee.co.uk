@@ -130,7 +130,7 @@ deploy-production:
     - echo "All files and directories:"
     - ls -la
     - echo "Preparing previous directory"
-    - >
+    - |
       ssh gitlab-ci@$DEPLOY_HOST "
       if [ -d $DEPLOY_DIR_BASE/previous ]; then               # If $DEPLOY_DIR_BASE/previous exists
         rm -rf $DEPLOY_DIR_BASE/previous/*                    # Delete all its contents
@@ -139,7 +139,7 @@ deploy-production:
       fi
       "
     - echo "Preparing deploy directory"
-    - >
+    - |
       ssh gitlab-ci@$DEPLOY_HOST "
       if [ -d $DEPLOY_DIR_BASE/deploy ]; then                 # If $DEPLOY_DIR_BASE/previous exists
         rm -rf $DEPLOY_DIR_BASE/deploy/*                      # Delete all its contents
@@ -148,7 +148,7 @@ deploy-production:
       fi
       "
     - echo "Preparing live directory"
-    - >
+    - |
       ssh gitlab-ci@$DEPLOY_HOST "
       if [ ! -d $DEPLOY_DIR_BASE/live ]; then                 # Check if $DEPLOY_DIR_BASE/live doesn't exist
         mkdir -m 775 $DEPLOY_DIR_BASE/live                    # Create the directory with permissions 775
@@ -168,10 +168,8 @@ deploy-production:
     - echo "Configuring live environment"
     #- ssh gitlab-ci@$DEPLOY_HOST "DEPLOY_DIR_BASE=$DEPLOY_DIR_BASE; echo \$DEPLOY_DIR_BASE/live; ls -A \$DEPLOY_DIR_BASE/live"
     #- ssh gitlab-ci@$DEPLOY_HOST "echo $DEPLOY_DIR_BASE/live; ls -A \$DEPLOY_DIR_BASE/live"
-    - >
+    - |
       ssh gitlab-ci@$DEPLOY_HOST "
-      DEPLOY_DIR_BASE=$DEPLOY_DIR_BASE;
-      echo "DEPLOY_DIR_BASE = $DEPLOY_DIR_BASE = \$DEPLOY_DIR_BASE";
       if [ -d $DEPLOY_DIR_BASE/live ]; then
         if [ -n \"$(ls -A $DEPLOY_DIR_BASE/live)\" ] && [ $(ls -d $DEPLOY_DIR_BASE/live/* | grep ^d | wc -l) -eq 1 ]; then
           PREVIOUS_VERSION=\$(ls -d $DEPLOY_DIR_BASE/live/*/)
