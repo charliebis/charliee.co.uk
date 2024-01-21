@@ -1,8 +1,12 @@
+# CICD script for Laravel sites on Abydos
+
 image: node:latest
 
 default:
   tags:
     - laravel
+    - abydos
+    - testtag
   artifacts:
     paths:
       - vendor/
