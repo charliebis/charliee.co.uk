@@ -130,21 +130,24 @@ deploy-production:
     - echo "All files and directories:"
     - ls -la
     - echo "Preparing previous directory"
-    - ssh gitlab-ci@$DEPLOY_HOST "
+    - >
+      ssh gitlab-ci@$DEPLOY_HOST "
       if [ -d $DEPLOY_DIR/previous ]; then               # If $DEPLOY_DIR/previous exists
         rm -rf $DEPLOY_DIR/previous/*                    # Delete all its contents
       else
         mkdir -m 775 $DEPLOY_DIR/previous                # Else, create the directory with permissions 775
       fi"
     - echo "Preparing deploy directory"
-    - ssh gitlab-ci@$DEPLOY_HOST "
+    - >
+      ssh gitlab-ci@$DEPLOY_HOST "
       if [ -d $DEPLOY_DIR/deploy ]; then                 # If $DEPLOY_DIR/previous exists
         rm -rf $DEPLOY_DIR/deploy/*                      # Delete all its contents
       else
         mkdir -m 775 $DEPLOY_DIR/deploy                  # Else, create the directory with permissions 775
       fi"
     - echo "Preparing live directory"
-    - ssh gitlab-ci@$DEPLOY_HOST "
+    - >
+      ssh gitlab-ci@$DEPLOY_HOST "
       if [ ! -d $DEPLOY_DIR/live ]; then                 # Check if $DEPLOY_DIR/live doesn't exist
       mkdir -m 775 $DEPLOY_DIR/live                      # Create the directory with permissions 775
       fi"
