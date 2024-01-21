@@ -10,10 +10,10 @@ default:
       - vite.config.js
       - .env
       - .env.production
+      - public/build/
 
 variables:
   VERSION: $CI_COMMIT_SHA
-  #DEPLOY_DIR: "/var/www/$APP_NAME/$VERSION"
   DEPLOY_DIR: "~/projects/$APP_PATH/$APP_NAME"
 
 # List of stages for jobs, and their order of execution
@@ -59,8 +59,8 @@ build-job:
     - npm install
     - npm run prod
     # Inject .env and .env.production files using CI/CD variables
-    - cp $CI_ENV_VARS ./.env
-    - cp $CI_ENV_VARS_PRODUCTION ./.env.production
+    - cp $ENV ./.env
+    - cp $ENV_PRODUCTION ./.env.production
     # Create a text file with the version hash
     - echo $VERSION > .version
     #- echo "Decrypting .env file(s)"
@@ -73,7 +73,6 @@ build-job:
     #- ls -la ./storage/framework/
     - echo 'Build directory contents'
     - ls -la
-
 
 # This job runs in the test stage.
 unit-test-job:
@@ -123,7 +122,7 @@ deploy-production:
     - ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     # Delete unnecessary files
-    - rm .env.example .env.encrypted .env.production.encrypted .gitignore .gitattributes
+    - rm .env.example .env.encrypted .env.production.example .env.production.encrypted .gitignore .gitattributes .gitlab-ci.yml
     - rm -rf .git
     # Set correct file and dir permissions
     - find ./ -type f -exec chmod 664 {} \;
