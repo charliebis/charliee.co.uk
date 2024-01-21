@@ -132,10 +132,8 @@ deploy-production:
     - echo "Preparing previous directory"
     - |
       ssh gitlab-ci@$DEPLOY_HOST "
-      if [ -d $DEPLOY_DIR_BASE/previous ]; then               # If $DEPLOY_DIR_BASE/previous exists
-        rm -rf $DEPLOY_DIR_BASE/previous/*                    # Delete all its contents
-      else
-        mkdir -m 775 $DEPLOY_DIR_BASE/previous                # Else, create the directory with permissions 775
+      if [ ! -d $DEPLOY_DIR_BASE/previous ]; then             # Check if $DEPLOY_DIR_BASE/previous doesn't exist
+        mkdir -m 775 $DEPLOY_DIR_BASE/previous                # Create the directory with permissions 775
       fi
       "
     - echo "Preparing deploy directory"
@@ -162,6 +160,7 @@ deploy-production:
           PREVIOUS_VERSION=\$(ls -d $DEPLOY_DIR_BASE/live/*/)
           PREVIOUS_VERSION=\${PREVIOUS_VERSION%?}
           PREVIOUS_VERSION=\${PREVIOUS_VERSION##*/}
+          rm -rf $DEPLOY_DIR_BASE/previous/*
           rsync -a $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION $DEPLOY_DIR_BASE/previous/
           if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
             rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
