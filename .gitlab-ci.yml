@@ -135,7 +135,7 @@ deploy-production:
     - echo 'Known hosts'
     - cat ~/.ssh/known_hosts
     # Put remote site into maintenance mode
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && if [ -f artisan ]; then php artisan down; else echo 'artisan not found'; fi"
+    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && if [ -f artisan ]; then php artisan down; else echo 'artisan not found'; fi"
     # Copy built code to a new directory on the deployment server
     - rsync --progress -ogr ./ gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR
     #- scp -r . gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR
@@ -145,7 +145,7 @@ deploy-production:
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan route:cache"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan view:cache"
     # Take remote site out of maintenance mode
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan up"
+    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan up"
     # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
   after_script:
     - echo "deploy-production > after_script script started:"
