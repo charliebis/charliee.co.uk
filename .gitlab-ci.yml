@@ -18,7 +18,7 @@ default:
 
 variables:
   VERSION: $CI_COMMIT_SHA
-  DEPLOY_DIR_BASE: "~/projects/$APP_PATH/$APP_NAME"
+  DEPLOY_DIR_BASE: "/home/gitlab-ci/projects/$APP_PATH/$APP_NAME"
 
 # List of stages for jobs, and their order of execution
 stages:
@@ -168,20 +168,15 @@ deploy-production:
     - echo "Configuring live environment"
     - >
       ssh gitlab-ci@$DEPLOY_HOST "
-      if [ -d $DEPLOY_DIR_BASE/live ] && [ -n "$(ls -A $DEPLOY_DIR_BASE/live)" ]; then
-        if [ -d $DEPLOY_DIR_BASE/live ] && [ -n "$(ls -A $DEPLOY_DIR_BASE/live)" ] && [ $(ls -d $DEPLOY_DIR_BASE/live/* | grep ^d | wc -l) -eq 1 ]; then
-          PREVIOUS_VERSION=\$(ls -d $DEPLOY_DIR_BASE/live/*/)
-          PREVIOUS_VERSION=\${PREVIOUS_VERSION%?}
-          PREVIOUS_VERSION=\${PREVIOUS_VERSION##*/}
-          rsync -a $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION $DEPLOY_DIR_BASE/previous/
-          if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
-            rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
-            ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
-            rm -rf $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION
-          else
-            echo 'Error: deploy directory does not contain the version named $VERSION'
-            exit 1
-          fi
+      if [ -d $DEPLOY_DIR_BASE/live ] && [ -n "$(ls -A $DEPLOY_DIR_BASE/live)" ] && [ $(ls -d $DEPLOY_DIR_BASE/live/* | grep ^d | wc -l) -eq 1 ]; then
+        PREVIOUS_VERSION=\$(ls -d $DEPLOY_DIR_BASE/live/*/)
+        PREVIOUS_VERSION=\${PREVIOUS_VERSION%?}
+        PREVIOUS_VERSION=\${PREVIOUS_VERSION##*/}
+        rsync -a $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION $DEPLOY_DIR_BASE/previous/
+        if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
+          rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
+          ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+          rm -rf $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION
         else
           echo 'Error: deploy directory does not contain the version named $VERSION'
           exit 1
