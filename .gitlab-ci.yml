@@ -181,7 +181,7 @@ deploy-production:
             #ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
             rm -rf $DEPLOY_DIR_BASE/live/$PREVIOUS_VERSION
           else
-            echo 'Error: deploy directory does not contain the version named $VERSION'
+            echo 'Error: deploy directory ($DEPLOY_DIR_BASE/live) does not contain the version named $VERSION'
             exit 1
           fi
         else
@@ -189,12 +189,12 @@ deploy-production:
             rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
             #ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
           else
-            echo 'Error: deploy directory does not contain the version named $VERSION'
+            echo 'Error: deploy directory ($DEPLOY_DIR_BASE/deploy) does not contain the version named $VERSION'
             exit 1
           fi
         fi
       else
-        echo 'Error: live directory does not exist'
+        echo 'Error: live directory ($DEPLOY_DIR_BASE/live) does not exist'
       fi
       '
     # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
