@@ -37,11 +37,7 @@ build-job:
     - echo "build-job > before_script started. Preparing build environment:"
     - echo "Installing PHP"
     - apt-get update -y && apt-get install php-cli php-bcmath php-curl php-json php-mbstring php-mysql php-tokenizer php-xml php-zip -y
-    ## Optionally, if you will be using any Git commands, set the user name and
-    ## email.
-    #- git config --global user.email gitlab-deploy@charliee.co.uk
-    #- git config --global user.name "Gitlab Deploy"
-    ## Composer
+    - echo "Installing composer"
     - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     - php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
     - php composer-setup.php
@@ -67,14 +63,6 @@ build-job:
     - cp $ENV_PRODUCTION ./.env.production
     # Create a text file with the version hash
     - echo $VERSION > .version
-    #- echo "Decrypting .env file(s)"
-    #- php artisan env:decrypt --key=$DECRYPTION_KEY_ENV
-    #- php artisan env:decrypt --env=production --key=$DECRYPTION_KEY_ENV_PRODUCTION
-    #- chmod -R 775 storage
-    #- chmod -R 775 bootstrap/cache
-
-    #- ls -la ./storage/
-    #- ls -la ./storage/framework/
     - echo 'Build directory contents'
     - ls -la
 
@@ -129,6 +117,7 @@ deploy-production:
     - rm .env.example .env.production.example .gitignore .gitattributes .gitlab-ci.yml
     - rm -rf .git
     # Ensure necessary dirs are present
+    - echo "Creating storage/ dirs:"
     - mkdir -p storage/framework/cache/data
     - mkdir -p storage/framework/sessions
     - mkdir -p storage/framework/testing
@@ -138,22 +127,66 @@ deploy-production:
     - find ./ -type d -exec chmod 775 {} \;
   script:
     - echo "deploy-production > script script started:"
-    - echo 'Build directory contents at start of deploy-production'
+    - echo "All files and directories:"
     - ls -la
-    - echo 'Known hosts'
-    - cat ~/.ssh/known_hosts
-    # Put remote site into maintenance mode
-    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && if [ -f artisan ]; then php artisan down; else echo 'artisan not found'; fi"
-    # Copy built code to a new directory on the deployment server
-    - rsync -ogr ./ gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR
-    #- scp -r . gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR
+    - echo "Preparing previous directory"
+    - ssh gitlab-ci@$DEPLOY_HOST "
+      if [ -d $DEPLOY_DIR/previous ]; then               # If $DEPLOY_DIR/previous exists
+        rm -rf $DEPLOY_DIR/previous/*                    # Delete all its contents
+      else
+        mkdir -m 775 $DEPLOY_DIR/previous                # Else, create the directory with permissions 775
+      fi"
+    - echo "Preparing deploy directory"
+    - ssh gitlab-ci@$DEPLOY_HOST "
+      if [ -d $DEPLOY_DIR/deploy ]; then                 # If $DEPLOY_DIR/previous exists
+        rm -rf $DEPLOY_DIR/deploy/*                      # Delete all its contents
+      else
+        mkdir -m 775 $DEPLOY_DIR/deploy                  # Else, create the directory with permissions 775
+      fi"
+    - echo "Preparing live directory"
+    - ssh gitlab-ci@$DEPLOY_HOST "
+      if [ ! -d $DEPLOY_DIR/live ]; then                 # Check if $DEPLOY_DIR/live doesn't exist
+      mkdir -m 775 $DEPLOY_DIR/live                      # Create the directory with permissions 775
+      fi"
+    # Copy built code to the deploy directory on the server
+    #- rsync -ogr ./ gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR
+    - scp -r . gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR/deploy/$VERSION
+    #- echo 'Known hosts'
+    #- cat ~/.ssh/known_hosts
+    - echo "Copied new version to server. Preparing Laravel deployment"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan optimize:clear"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan config:cache"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan event:cache"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan route:cache"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan view:cache"
-    # Take remote site out of maintenance mode
-    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR && php artisan up"
+    - echo "Configuring live environment"
+    - >
+      ssh gitlab-ci@$DEPLOY_HOST "
+      if [ -d $DEPLOY_DIR/live ] && [ \$(ls -d $DEPLOY_DIR/live/* | grep ^d | wc -l) -eq 1 ]; then
+        PREVIOUS_VERSION=\$(ls -d $DEPLOY_DIR/live/*/)
+        PREVIOUS_VERSION=\${PREVIOUS_VERSION%?}
+        PREVIOUS_VERSION=\${PREVIOUS_VERSION##*/}
+        rsync -a $DEPLOY_DIR/live/\$PREVIOUS_VERSION/ $DEPLOY_DIR/previous/
+        if [ -d $DEPLOY_DIR/deploy/$VERSION ]; then
+          rsync -a $DEPLOY_DIR/deploy/$VERSION/ $DEPLOY_DIR/live/
+          ln -sfn $DEPLOY_DIR/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+          rm -rf $DEPLOY_DIR/live/\$PREVIOUS_VERSION
+        else
+          echo 'Error: deploy directory does not contain the version named $VERSION'
+          exit 1
+        fi
+      elif [ -d $DEPLOY_DIR/live ] && [ -z \$(ls -A $DEPLOY_DIR/live) ]; then
+        if [ -d $DEPLOY_DIR/deploy/$VERSION ]; then
+          rsync -a $DEPLOY_DIR/deploy/$VERSION/ $DEPLOY_DIR/live/
+          ln -sfn $DEPLOY_DIR/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+        else
+          echo 'Error: deploy directory does not contain the version named $VERSION'
+          exit 1
+        fi
+      else
+        echo 'Error: live directory does not contain only the current version'
+        exit 1
+      fi"
     # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
   after_script:
     - echo "deploy-production > after_script script started:"
