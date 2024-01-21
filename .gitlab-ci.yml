@@ -14,6 +14,7 @@ default:
       - .env
       - .env.production
       - public/build/
+      - .version
 
 variables:
   VERSION: $CI_COMMIT_SHA
@@ -127,7 +128,12 @@ deploy-production:
     # Delete unnecessary files
     - rm .env.example .env.production.example .gitignore .gitattributes .gitlab-ci.yml
     - rm -rf .git
-    # Set correct file and dir permissions
+    # Ensure necessary dirs are present
+    - mkdir -p storage/framework/cache/data
+    - mkdir -p storage/framework/sessions
+    - mkdir -p storage/framework/testing
+    - mkdir -p storage/framework/views
+    # Set correct file and dir permissions - owner and group need full permissions
     - find ./ -type f -exec chmod 664 {} \;
     - find ./ -type d -exec chmod 775 {} \;
   script:
