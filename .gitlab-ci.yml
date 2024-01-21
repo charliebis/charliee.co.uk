@@ -122,7 +122,7 @@ deploy-production:
     - ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     # Delete unnecessary files
-    - rm .env.example .env.encrypted .env.production.example .env.production.encrypted .gitignore .gitattributes .gitlab-ci.yml
+    - rm .env.example .env.production.example .gitignore .gitattributes .gitlab-ci.yml
     - rm -rf .git
     # Set correct file and dir permissions
     - find ./ -type f -exec chmod 664 {} \;
