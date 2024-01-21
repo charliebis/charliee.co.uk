@@ -169,9 +169,9 @@ deploy-production:
     #- ssh gitlab-ci@$DEPLOY_HOST "DEPLOY_DIR_BASE=$DEPLOY_DIR_BASE; echo \$DEPLOY_DIR_BASE/live; ls -A \$DEPLOY_DIR_BASE/live"
     #- ssh gitlab-ci@$DEPLOY_HOST "echo $DEPLOY_DIR_BASE/live; ls -A \$DEPLOY_DIR_BASE/live"
     - |
-      ssh gitlab-ci@$DEPLOY_HOST "
+      ssh gitlab-ci@$DEPLOY_HOST '
       if [ -d $DEPLOY_DIR_BASE/live ]; then
-        if [ -n \"$(ls -A /home/gitlab-ci/projects/personal/charliee/charliee.co.uk/live)\" ] && [ $(ls -d /home/gitlab-ci/projects/personal/charliee/charliee.co.uk/live/* | grep ^d | wc -l) -eq 1 ]; then
+        if [ -n "$(ls -A $DEPLOY_DIR_BASE/live)" ] && [ $(ls -d $DEPLOY_DIR_BASE/live/* | grep ^d | wc -l) -eq 1 ]; then
           PREVIOUS_VERSION=\$(ls -d $DEPLOY_DIR_BASE/live/*/)
           PREVIOUS_VERSION=\${PREVIOUS_VERSION%?}
           PREVIOUS_VERSION=\${PREVIOUS_VERSION##*/}
@@ -196,7 +196,7 @@ deploy-production:
       else
         echo 'Error: live directory does not exist'
       fi
-      "
+      '
     # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
   after_script:
     - echo "deploy-production > after_script script started:"
