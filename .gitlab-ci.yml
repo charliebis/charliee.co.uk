@@ -160,11 +160,11 @@ deploy-production:
     #- echo 'Known hosts'
     #- cat ~/.ssh/known_hosts
     - echo "Copied new version to server. Preparing Laravel deployment"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/live/$VERSION && php artisan optimize:clear"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/live/$VERSION && php artisan config:cache"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/live/$VERSION && php artisan event:cache"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/live/$VERSION && php artisan route:cache"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/live/$VERSION && php artisan view:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/deploy/$VERSION && php artisan optimize:clear"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/deploy/$VERSION && php artisan config:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/deploy/$VERSION && php artisan event:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/deploy/$VERSION && php artisan route:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/deploy/$VERSION && php artisan view:cache"
     - echo "Configuring live environment"
     - >
       ssh gitlab-ci@$DEPLOY_HOST "
