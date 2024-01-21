@@ -166,6 +166,7 @@ deploy-production:
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan route:cache"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan view:cache"
     - echo "Configuring live environment"
+    - ssh gitlab-ci@$DEPLOY_HOST "echo \$DEPLOY_DIR_BASE/live; ls -A \$DEPLOY_DIR_BASE/live"
     - >
       ssh gitlab-ci@$DEPLOY_HOST "
       if [ -d $DEPLOY_DIR_BASE/live ]; then
