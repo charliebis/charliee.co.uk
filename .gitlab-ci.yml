@@ -154,6 +154,35 @@ deploy-production:
         mkdir -m 775 $DEPLOY_DIR_BASE/live                    # Create the directory with permissions 775
       fi
       "
+    - |
+      echo "
+      if [ -d $DEPLOY_DIR_BASE/live ]; then
+        if [ -n \"$(ls -A $DEPLOY_DIR_BASE/live)\" ] && [ $(ls -d $DEPLOY_DIR_BASE/live/* | grep ^d | wc -l) -eq 1 ]; then
+          PREVIOUS_VERSION=\$(ls -d $DEPLOY_DIR_BASE/live/*/)
+          PREVIOUS_VERSION=\${PREVIOUS_VERSION%?}
+          PREVIOUS_VERSION=\${PREVIOUS_VERSION##*/}
+          rsync -a $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION $DEPLOY_DIR_BASE/previous/
+          if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
+            rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
+            #ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+            rm -rf $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION
+          else
+            echo 'Error: deploy directory does not contain the version named $VERSION'
+            exit 1
+          fi
+        else
+          if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
+            rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
+            #ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+          else
+            echo 'Error: deploy directory does not contain the version named $VERSION'
+            exit 1
+          fi
+        fi
+      else
+        echo 'Error: live directory does not exist'
+      fi
+      " > deploy.sh
     # Copy built code to the deploy directory on the server
     #- rsync -ogr ./ gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR_BASE
     - scp -r . gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR_BASE/deploy/$VERSION
@@ -168,35 +197,6 @@ deploy-production:
     - echo "Configuring live environment"
     #- ssh gitlab-ci@$DEPLOY_HOST "DEPLOY_DIR_BASE=$DEPLOY_DIR_BASE; echo $DEPLOY_DIR_BASE/live; ls -A $DEPLOY_DIR_BASE/live"
     #- ssh gitlab-ci@$DEPLOY_HOST "echo $DEPLOY_DIR_BASE/live; ls -A $DEPLOY_DIR_BASE/live"
-    - |
-      ssh gitlab-ci@$DEPLOY_HOST '
-      if [ -d $DEPLOY_DIR_BASE/live ]; then
-        if [ -n "$(ls -A $DEPLOY_DIR_BASE/live)" ] && [ $(ls -d $DEPLOY_DIR_BASE/live/* | grep ^d | wc -l) -eq 1 ]; then
-          PREVIOUS_VERSION=$(ls -d $DEPLOY_DIR_BASE/live/*/)
-          PREVIOUS_VERSION=${PREVIOUS_VERSION%?}
-          PREVIOUS_VERSION=${PREVIOUS_VERSION##*/}
-          rsync -a $DEPLOY_DIR_BASE/live/$PREVIOUS_VERSION $DEPLOY_DIR_BASE/previous/
-          if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
-            rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
-            #ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
-            rm -rf $DEPLOY_DIR_BASE/live/$PREVIOUS_VERSION
-          else
-            echo 'Error: deploy directory ($DEPLOY_DIR_BASE/live) does not contain the version named $VERSION'
-            exit 1
-          fi
-        else
-          if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
-            rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
-            #ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
-          else
-            echo 'Error: deploy directory ($DEPLOY_DIR_BASE/deploy) does not contain the version named $VERSION'
-            exit 1
-          fi
-        fi
-      else
-        echo 'Error: live directory ($DEPLOY_DIR_BASE/live) does not exist'
-      fi
-      '
     # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
   after_script:
     - echo "deploy-production > after_script script started:"
