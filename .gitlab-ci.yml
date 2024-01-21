@@ -18,7 +18,7 @@ default:
 
 variables:
   VERSION: $CI_COMMIT_SHA
-  DEPLOY_DIR: "~/projects/$APP_PATH/$APP_NAME"
+  DEPLOY_DIR_BASE: "~/projects/$APP_PATH/$APP_NAME"
 
 # List of stages for jobs, and their order of execution
 stages:
@@ -132,59 +132,59 @@ deploy-production:
     - echo "Preparing previous directory"
     - >
       ssh gitlab-ci@$DEPLOY_HOST "
-      if [ -d $DEPLOY_DIR/previous ]; then               # If $DEPLOY_DIR/previous exists
-        rm -rf $DEPLOY_DIR/previous/*                    # Delete all its contents
+      if [ -d $DEPLOY_DIR_BASE/previous ]; then               # If $DEPLOY_DIR_BASE/previous exists
+        rm -rf $DEPLOY_DIR_BASE/previous/*                    # Delete all its contents
       else
-        mkdir -m 775 $DEPLOY_DIR/previous                # Else, create the directory with permissions 775
+        mkdir -m 775 $DEPLOY_DIR_BASE/previous                # Else, create the directory with permissions 775
       fi
       "
     - echo "Preparing deploy directory"
     - >
       ssh gitlab-ci@$DEPLOY_HOST "
-      if [ -d $DEPLOY_DIR/deploy ]; then                 # If $DEPLOY_DIR/previous exists
-        rm -rf $DEPLOY_DIR/deploy/*                      # Delete all its contents
+      if [ -d $DEPLOY_DIR_BASE/deploy ]; then                 # If $DEPLOY_DIR_BASE/previous exists
+        rm -rf $DEPLOY_DIR_BASE/deploy/*                      # Delete all its contents
       else
-        mkdir -m 775 $DEPLOY_DIR/deploy                  # Else, create the directory with permissions 775
+        mkdir -m 775 $DEPLOY_DIR_BASE/deploy                  # Else, create the directory with permissions 775
       fi
       "
     - echo "Preparing live directory"
     - >
       ssh gitlab-ci@$DEPLOY_HOST "
-      if [ ! -d $DEPLOY_DIR/live ]; then                 # Check if $DEPLOY_DIR/live doesn't exist
-        mkdir -m 775 $DEPLOY_DIR/live                    # Create the directory with permissions 775
+      if [ ! -d $DEPLOY_DIR_BASE/live ]; then                 # Check if $DEPLOY_DIR_BASE/live doesn't exist
+        mkdir -m 775 $DEPLOY_DIR_BASE/live                    # Create the directory with permissions 775
       fi
       "
     # Copy built code to the deploy directory on the server
-    #- rsync -ogr ./ gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR
-    - scp -r . gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR/deploy/$VERSION
+    #- rsync -ogr ./ gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR_BASE
+    - scp -r . gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR_BASE/deploy/$VERSION
     #- echo 'Known hosts'
     #- cat ~/.ssh/known_hosts
     - echo "Copied new version to server. Preparing Laravel deployment"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/deploy/$VERSION && php artisan optimize:clear"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/deploy/$VERSION && php artisan config:cache"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/deploy/$VERSION && php artisan event:cache"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/deploy/$VERSION && php artisan route:cache"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR/deploy/$VERSION && php artisan view:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan optimize:clear"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan config:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan event:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan route:cache"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan view:cache"
     - echo "Configuring live environment"
     - >
       ssh gitlab-ci@$DEPLOY_HOST "
-      if [ -d $DEPLOY_DIR/live ] && [ \$(ls -d $DEPLOY_DIR/live/* | grep ^d | wc -l) -eq 1 ]; then
-        PREVIOUS_VERSION=\$(ls -d $DEPLOY_DIR/live/*/)
+      if [ -d $DEPLOY_DIR_BASE/live ] && [ -n "$(ls -A $DEPLOY_DIR_BASE/live)" ] && [ $(ls -d $DEPLOY_DIR_BASE/live/* | grep ^d | wc -l) -eq 1 ]; then
+        PREVIOUS_VERSION=\$(ls -d $DEPLOY_DIR_BASE/live/*/)
         PREVIOUS_VERSION=\${PREVIOUS_VERSION%?}
         PREVIOUS_VERSION=\${PREVIOUS_VERSION##*/}
-        rsync -a $DEPLOY_DIR/live/\$PREVIOUS_VERSION/ $DEPLOY_DIR/previous/
-        if [ -d $DEPLOY_DIR/deploy/$VERSION ]; then
-          rsync -a $DEPLOY_DIR/deploy/$VERSION/ $DEPLOY_DIR/live/
-          ln -sfn $DEPLOY_DIR/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
-          rm -rf $DEPLOY_DIR/live/\$PREVIOUS_VERSION
+        rsync -a $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION $DEPLOY_DIR_BASE/previous/
+        if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
+          rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
+          ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+          rm -rf $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION
         else
           echo 'Error: deploy directory does not contain the version named $VERSION'
           exit 1
         fi
-      elif [ -d $DEPLOY_DIR/live ] && [ -z \$(ls -A $DEPLOY_DIR/live) ]; then
-        if [ -d $DEPLOY_DIR/deploy/$VERSION ]; then
-          rsync -a $DEPLOY_DIR/deploy/$VERSION/ $DEPLOY_DIR/live/
-          ln -sfn $DEPLOY_DIR/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+      elif [ -d $DEPLOY_DIR_BASE/live ] && [ -z \$(ls -A $DEPLOY_DIR_BASE/live) ]; then
+        if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
+          rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
+          ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
         else
           echo 'Error: deploy directory does not contain the version named $VERSION'
           exit 1
