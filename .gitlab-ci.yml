@@ -164,7 +164,7 @@ deploy-production:
           rsync -a $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION $DEPLOY_DIR_BASE/previous/
           if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
             rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
-            ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+            ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME
             rm -rf $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION
             rm -rf $DEPLOY_DIR_BASE/deploy/*
           else
@@ -174,7 +174,7 @@ deploy-production:
         else
           if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
             rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
-            ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+            ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME
             rm -rf $DEPLOY_DIR_BASE/deploy/*
           else
             echo 'Error: deploy directory does not contain the version named $VERSION'
@@ -198,7 +198,7 @@ deploy-production:
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan view:cache"
     - echo "Configuring live environment"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && sh -x deploy.sh"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/live/$VERSION && rm deploy.sh"
     - echo $CI_COMMIT_REF_SLUG"
   after_script:
     - echo "deploy-production > after_script script started:"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/live/$VERSION && rm deploy.sh"
