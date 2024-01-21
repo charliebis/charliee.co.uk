@@ -6,7 +6,6 @@ default:
   tags:
     - laravel
     - abydos
-    - testtag
   artifacts:
     paths:
       - vendor/
