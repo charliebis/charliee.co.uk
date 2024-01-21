@@ -103,7 +103,6 @@ deploy-production:
     - master
   before_script:
     - echo "deploy-production > before_script script started:"
-    - apt-get install rsync
     - echo "Installing OpenSSH"
     - apt-get update -y && apt-get install openssh-client -y
     ## Run ssh-agent (inside the build environment)
