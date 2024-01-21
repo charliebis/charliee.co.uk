@@ -198,8 +198,7 @@ deploy-production:
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan view:cache"
     - echo "Configuring live environment"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && sh -x deploy.sh"
-    #- ssh gitlab-ci@$DEPLOY_HOST "DEPLOY_DIR_BASE=$DEPLOY_DIR_BASE; echo $DEPLOY_DIR_BASE/live; ls -A $DEPLOY_DIR_BASE/live"
-    #- ssh gitlab-ci@$DEPLOY_HOST "echo $DEPLOY_DIR_BASE/live; ls -A $DEPLOY_DIR_BASE/live"
-    # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/live/$VERSION && rm deploy.sh"
+    - echo $CI_COMMIT_REF_SLUG"
   after_script:
     - echo "deploy-production > after_script script started:"
