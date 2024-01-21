@@ -176,7 +176,7 @@ deploy-production:
           rsync -a $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION $DEPLOY_DIR_BASE/previous/
           if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
             rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
-            ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+            #ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
             rm -rf $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION
           else
             echo 'Error: deploy directory does not contain the version named $VERSION'
@@ -185,7 +185,7 @@ deploy-production:
         else
           if [ -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
             rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
-            ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
+            #ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME/
           else
             echo 'Error: deploy directory does not contain the version named $VERSION'
             exit 1
