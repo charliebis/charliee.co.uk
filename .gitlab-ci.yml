@@ -136,7 +136,8 @@ deploy-production:
         rm -rf $DEPLOY_DIR/previous/*                    # Delete all its contents
       else
         mkdir -m 775 $DEPLOY_DIR/previous                # Else, create the directory with permissions 775
-      fi"
+      fi
+      "
     - echo "Preparing deploy directory"
     - >
       ssh gitlab-ci@$DEPLOY_HOST "
@@ -144,13 +145,15 @@ deploy-production:
         rm -rf $DEPLOY_DIR/deploy/*                      # Delete all its contents
       else
         mkdir -m 775 $DEPLOY_DIR/deploy                  # Else, create the directory with permissions 775
-      fi"
+      fi
+      "
     - echo "Preparing live directory"
     - >
       ssh gitlab-ci@$DEPLOY_HOST "
       if [ ! -d $DEPLOY_DIR/live ]; then                 # Check if $DEPLOY_DIR/live doesn't exist
-      mkdir -m 775 $DEPLOY_DIR/live                      # Create the directory with permissions 775
-      fi"
+        mkdir -m 775 $DEPLOY_DIR/live                    # Create the directory with permissions 775
+      fi
+      "
     # Copy built code to the deploy directory on the server
     #- rsync -ogr ./ gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR
     - scp -r . gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR/deploy/$VERSION
@@ -189,7 +192,8 @@ deploy-production:
       else
         echo 'Error: live directory does not contain only the current version'
         exit 1
-      fi"
+      fi
+      "
     # echo "CI_COMMIT_REF_SLUG is: ", $CI_COMMIT_REF_SLUG"
   after_script:
     - echo "deploy-production > after_script script started:"
