@@ -31,8 +31,8 @@ build-job:
     - staging
   before_script:
     - echo "build-job > before_script started. Preparing build environment:"
-    - echo "Installing rysnc and php"
-    - apt-get update -y && apt-get install rsync php-cli php-bcmath php-curl php-json php-mbstring php-mysql php-tokenizer php-xml php-zip -y
+    - echo "Installing PHP"
+    - apt-get update -y && apt-get install php-cli php-bcmath php-curl php-json php-mbstring php-mysql php-tokenizer php-xml php-zip -y
     ## Optionally, if you will be using any Git commands, set the user name and
     ## email.
     #- git config --global user.email gitlab-deploy@charliee.co.uk
@@ -103,8 +103,8 @@ deploy-production:
     - master
   before_script:
     - echo "deploy-production > before_script script started:"
-    - echo "Installing OpenSSH"
-    - apt-get update -y && apt-get install openssh-client -y
+    - echo "Installing rsync and OpenSSH"
+    - apt-get update -y && apt-get install rsync openssh-client -y
     ## Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
     ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
