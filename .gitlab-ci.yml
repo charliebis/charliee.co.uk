@@ -154,6 +154,7 @@ deploy-production:
         mkdir -m 775 $DEPLOY_DIR_BASE/live                    # Create the directory with permissions 775
       fi
       "
+    - echo "Creating deployment script"
     - |
       echo "
       if [ -d $DEPLOY_DIR_BASE/live ]; then
