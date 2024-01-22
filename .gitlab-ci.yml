@@ -195,6 +195,6 @@ deploy-production:
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan view:cache"
     - echo "Configuring live environment"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && sh -x deploy.sh"
+    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/live/$VERSION && rm deploy.sh"
   after_script:
     - echo "deploy-production > after_script script started:"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/live/$VERSION && rm deploy.sh"
