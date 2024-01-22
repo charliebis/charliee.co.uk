@@ -122,6 +122,7 @@ deploy-production:
     - mkdir -p storage/framework/sessions
     - mkdir -p storage/framework/testing
     - mkdir -p storage/framework/views
+    - mkdir -p storage/logs
     # Set correct file and dir permissions - owner and group need full permissions
     - find ./ -type f -exec chmod 664 {} \;
     - find ./ -type d -exec chmod 775 {} \;
