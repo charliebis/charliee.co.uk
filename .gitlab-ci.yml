@@ -196,7 +196,7 @@ deploy-production:
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan event:cache"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan route:cache"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan view:cache"
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan migrate"
+    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan migrate"
     - echo "Configuring live environment"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && sh -x deploy.sh"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/live/$VERSION && rm deploy.sh"
