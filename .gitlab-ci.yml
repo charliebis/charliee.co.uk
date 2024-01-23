@@ -188,7 +188,7 @@ deploy-production:
         echo 'Error: live directory does not exist'
       fi
       " > deploy.sh
-    # Copy built code to the deploy directory on the server
+    # Copy built code to the deploy directory on the live server
     - scp -r . gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR_BASE/deploy/$VERSION
     - echo "Copied new version to server. Preparing Laravel deployment"
     - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan optimize:clear"
