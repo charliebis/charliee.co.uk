@@ -77,7 +77,7 @@ unit-test-job:
     - echo "stage unit-test-job script is now running"
     #- ./vendor/bin/pint
 
-# This job also runs in the test stage.
+# This job runs in the test stage.
 lint-test-job:
   stage: test # It can run at the same time as unit-test-job (in parallel).
   only:
