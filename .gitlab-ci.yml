@@ -18,7 +18,7 @@ default:
 
 variables:
   VERSION: $CI_COMMIT_SHA
-  DEPLOY_DIR_BASE: "/home/gitlab-ci/projects/$APP_PATH/$APP_NAME"
+  DEPLOY_DIR_BASE: "/home/$DEPLOY_USER/projects/$APP_PATH/$APP_NAME"
 
 # List of stages for jobs, and their order of execution
 stages:
@@ -65,6 +65,7 @@ build-job:
     - echo $VERSION > .version
     - echo 'Build directory contents'
     - ls -la
+
 # This job runs in the test stage.
 unit-test-job:
   stage: test # It only starts when the job in the build stage completes successfully.
@@ -131,29 +132,30 @@ deploy-production:
     - echo "deploy-production > script script started:"
     - echo "All files and directories:"
     - ls -la
+    # Ensure previous, deploy and live directories exist. They will exist, normally. They will only be created now
+    # if this is the first deployment of this project
     - echo "Preparing previous directory"
     - |
-      ssh gitlab-ci@$DEPLOY_HOST "
+      ssh $DEPLOY_USER@$DEPLOY_HOST "
       if [ ! -d $DEPLOY_DIR_BASE/previous ]; then             # Check if $DEPLOY_DIR_BASE/previous doesn't exist
         mkdir -m 775 $DEPLOY_DIR_BASE/previous                # Create the directory with permissions 775
       fi
       "
     - echo "Preparing deploy directory"
     - |
-      ssh gitlab-ci@$DEPLOY_HOST "
-      if [ -d $DEPLOY_DIR_BASE/deploy ]; then                 # If $DEPLOY_DIR_BASE/previous exists
-        rm -rf $DEPLOY_DIR_BASE/deploy/*                      # Delete all its contents
-      else
-        mkdir -m 775 $DEPLOY_DIR_BASE/deploy                  # Else, create the directory with permissions 775
+      ssh $DEPLOY_USER@$DEPLOY_HOST "
+      if [ ! -d $DEPLOY_DIR_BASE/deploy ]; then               # Check if $DEPLOY_DIR_BASE/deploy doesn't exist
+        mkdir -m 775 $DEPLOY_DIR_BASE/deploy                  # Create the directory with permissions 775
       fi
       "
     - echo "Preparing live directory"
     - |
-      ssh gitlab-ci@$DEPLOY_HOST "
+      ssh $DEPLOY_USER@$DEPLOY_HOST "
       if [ ! -d $DEPLOY_DIR_BASE/live ]; then                 # Check if $DEPLOY_DIR_BASE/live doesn't exist
         mkdir -m 775 $DEPLOY_DIR_BASE/live                    # Create the directory with permissions 775
       fi
       "
+    # The deployment script is created now but not run until after the code has been copied to the server
     - echo "Creating deployment script"
     - |
       echo "
@@ -171,9 +173,6 @@ deploy-production:
             PREVIOUS_VERSION=\${PREVIOUS_VERSION%?}
             PREVIOUS_VERSION=\${PREVIOUS_VERSION##*/}
             echo \"Existing live version found: live/\$PREVIOUS_VERSION\"
-            echo \"Deleting everything in the previous dir..."
-            rm -rf $DEPLOY_DIR_BASE/previous/*
-            echo \"Done\"
             echo \"Copying existing live version to previous...\"
             rsync -a $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION $DEPLOY_DIR_BASE/previous/
             echo \"Done\"
@@ -192,37 +191,30 @@ deploy-production:
           echo \"Creating symlink to point at new live version: "/var/www/$APP_PATH/$APP_NAME to $DEPLOY_DIR_BASE/live/$VERSION
           # Recreate the symlink to point at the new version
           ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME
-          # Purge the version sat in deploy (already copied to live)
-          echo \"Deleting everything in the deploy dir..."
-          rm -rf $DEPLOY_DIR_BASE/deploy/*
-          echo \"Done\"
-          # Delete the previous live version, if there is one
-          if [ -n "\${PREVIOUS_VERSION}" ]; then
-            echo \"Deleting the old live version at: $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION..."
-            rm -rf $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION
-            echo \"Done\"
-          else
-            echo \"There is no old version in live to delete\"
-          fi
         fi
       fi
       echo \"deploy.sh has finished\"
       " > deploy.sh
     # Copy built code to the deploy directory on the live server
     - echo "Copying new version to remote host..."
-    - scp -r . gitlab-ci@$DEPLOY_HOST:$DEPLOY_DIR_BASE/deploy/$VERSION
-      echo "Done"
-    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan optimize:clear"
-    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan config:cache"
-    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan event:cache"
-    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan route:cache"
-    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan view:cache"
-    #- ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan migrate"
+    - scp -r . $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_DIR_BASE/deploy/$VERSION
+    - echo "Done"
+    # Configure
     - echo "Configuring live environment..."
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && sh -x deploy.sh"
-      echo "Done"
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && sh -x deploy.sh"
+    - echo "Done"
     - echo "Deleting deploy.sh from remote host..."
-    - ssh gitlab-ci@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/live/$VERSION && rm deploy.sh"
-      echo "Done"
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/live/$VERSION && rm deploy.sh"
+    - echo "Done"
+    # Clean up
+    - echo "Running purge script to delete old deploy versions..."
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER $DEPLOY_DIR_BASE/deploy..."
+    - echo "Done"
+    - echo "Running purge script to delete old previous versions..."
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER $DEPLOY_DIR_BASE/previous..."
+    - echo "Done"
+    - echo "Running purge script to delete old live versions..."
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER $DEPLOY_DIR_BASE/live..."
+    - echo "Done"
   after_script:
     - echo "deploy-production > after_script script started:"
