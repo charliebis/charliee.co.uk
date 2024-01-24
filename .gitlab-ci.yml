@@ -160,11 +160,11 @@ deploy-production:
     - |
       echo "
       if [ ! -d $DEPLOY_DIR_BASE/live ] || [ ! -d $DEPLOY_DIR_BASE/previous ] || [ ! -d $DEPLOY_DIR_BASE/deploy ]; then
-        echo 'Error: live and/or previous and/or deploy directories do not exist'
+        echo \"Error: live and/or previous and/or deploy directories do not exist\"
         exit 1
       else
         if [ ! -d $DEPLOY_DIR_BASE/deploy/$VERSION ]; then
-          echo 'Error: deploy directory does not contain the version named $VERSION'
+          echo \"Error: deploy directory does not contain the version named $VERSION\"
           exit 1
         else
           if [ -n \"\$(ls -A $DEPLOY_DIR_BASE/live)\" ] && [ \$(find $DEPLOY_DIR_BASE/live/* -maxdepth 0 -type d | wc -l) -eq 1 ]; then
@@ -185,10 +185,10 @@ deploy-production:
           cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan view:cache
           #cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan migrate
           # Copy the new version in deploy into live
-          echo \"Copying new version to live..."
+          echo \"Copying new version to live...\"
           rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
-          echo \"Done"
-          echo \"Creating symlink to point at new live version: "/var/www/$APP_PATH/$APP_NAME to $DEPLOY_DIR_BASE/live/$VERSION
+          echo \"Done\"
+          echo \"Creating symlink to point at new live version: /var/www/$APP_PATH/$APP_NAME to $DEPLOY_DIR_BASE/live/$VERSION\"
           # Recreate the symlink to point at the new version
           ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME
         fi
