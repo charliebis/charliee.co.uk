@@ -208,13 +208,13 @@ deploy-production:
     - echo "Done"
     # Clean up
     - echo "Running purge script to delete old deploy versions..."
-    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER deploy"
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER $APP_PATH/$APP_NAME/deploy"
     - echo "Done"
     - echo "Running purge script to delete old previous versions..."
-    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER previous"
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER $APP_PATH/$APP_NAME/previous"
     - echo "Done"
     - echo "Running purge script to delete old live versions..."
-    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER live"
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER $APP_PATH/$APP_NAME/live"
     - echo "Done"
   after_script:
     - echo "deploy-production > after_script script started:"
