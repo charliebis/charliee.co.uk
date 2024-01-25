@@ -53,7 +53,7 @@ build-job:
     - php -v
     - echo "Composer version:"
     - composer -V
-    - echo 'Current directory:'
+    - echo "Current directory:"
     - pwd
     - composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
     - npm install
@@ -62,7 +62,13 @@ build-job:
     - cp $ENV ./.env
     - cp $ENV_PRODUCTION ./.env.production
     # Create a text file with the version hash
-    - echo $VERSION > .version
+    - echo $VERSION > .deployment-info
+    - |
+      echo '{' > .deployment-info
+      echo '"VERSION": "'$VERSION'",' >> .deployment-info
+      echo '"CI_COMMIT_SHORT_SHA": "'$CI_COMMIT_SHORT_SHA'",' >> .deployment-info
+      echo '"CI_COMMIT_AUTHOR": "'$CI_COMMIT_AUTHOR'"' >> .deployment-info
+      echo '}' >> .deployment-info
     - echo 'Build directory contents'
     - ls -la
 
