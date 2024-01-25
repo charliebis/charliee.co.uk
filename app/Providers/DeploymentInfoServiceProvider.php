@@ -18,7 +18,7 @@ class DeploymentInfoServiceProvider extends ServiceProvider
      * Bootstrap services.
      */
     public function boot(): void {
-        $path = base_path('.deployment-info');
+        $path = base_path('.deployment-info.json');
         if (file_exists($path)) {
             $deploymentInfo = trim(file_get_contents($path));
             // Check if the file content is valid JSON
