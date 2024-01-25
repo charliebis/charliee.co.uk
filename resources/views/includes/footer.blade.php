@@ -39,6 +39,6 @@
             Software Engineer | Leighton Buzzard, U.K.
         </p>
         <p>Copyright © {{ date('Y') }} - All rights reserved</p>
-        <p class="mt-6">{{ config('app.version') }}</p>
+        <p class="mt-6">{{ config('app.deploymentinfo.version') }}</p>
     </div>
 </footer>

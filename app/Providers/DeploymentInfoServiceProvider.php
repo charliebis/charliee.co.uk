@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class VersionServiceProvider extends ServiceProvider
+class DeploymentInfoServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -27,12 +27,15 @@ class VersionServiceProvider extends ServiceProvider
                 $deploymentInfo = json_decode($deploymentInfo, true);
                 // Loop through the resulting array and create Laravel config values
                 foreach($deploymentInfo as $key => $value) {
-                    config(['app.' . strtolower($key) => $value]);
+                    config(['app.deploymentinfo.' . strtolower($key) => $value]);
+                }
+                if(!empty($deploymentInfo['CI_COMMIT_SHA'])) {
+                    config(['app.deploymentinfo.version' => $deploymentInfo['CI_COMMIT_SHA']]);
                 }
             }
         }
         else {
-            config(['app.version' => 'Unversioned']);
+            config(['app.deploymentinfo.version' => 'Unversioned']);
         }
     }
 }
