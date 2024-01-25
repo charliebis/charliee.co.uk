@@ -29,3 +29,4 @@ web.dockerfile
 docker-compose.yml
 vhost.conf
 setup.sh
+.version

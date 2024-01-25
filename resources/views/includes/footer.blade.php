@@ -39,5 +39,6 @@
             Software Engineer | Leighton Buzzard, U.K.
         </p>
         <p>Copyright © {{ date('Y') }} - All rights reserved</p>
+        <p>{{ config('app.version') }}</p>
     </div>
 </footer>
