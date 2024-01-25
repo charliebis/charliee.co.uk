@@ -66,15 +66,15 @@ build-job:
       echo '{' > .deployment-info.json
       echo '"CI_COMMIT_SHA": "'$CI_COMMIT_SHA'",' >> .deployment-info.json
       echo '"CI_COMMIT_SHORT_SHA": "'$CI_COMMIT_SHORT_SHA'",' >> .deployment-info.json
-      echo '"CI_COMMIT_AUTHOR": "'$CI_COMMIT_AUTHOR'"' >> .deployment-info.json
-      echo '"CI_COMMIT_BEFORE_SHA": "'$CI_COMMIT_BEFORE_SHA'"' >> .deployment-info.json
-      echo '"CI_COMMIT_BRANCH": "'$CI_COMMIT_BRANCH'"' >> .deployment-info.json
-      echo '"CI_DEFAULT_BRANCH": "'$CI_DEFAULT_BRANCH'"' >> .deployment-info.json
-      echo '"CI_JOB_ID": "'$CI_JOB_ID'"' >> .deployment-info.json
-      echo '"CI_PROJECT_ID": "'$CI_PROJECT_ID'"' >> .deployment-info.json
-      echo '"CI_PROJECT_NAME": "'$CI_PROJECT_NAME'"' >> .deployment-info.json
-      echo '"CI_PROJECT_TITLE": "'$CI_PROJECT_TITLE'"' >> .deployment-info.json
-      echo '"CI_RUNNER_ID": "'$CI_RUNNER_ID'"' >> .deployment-info.json
+      echo '"CI_COMMIT_AUTHOR": "'$CI_COMMIT_AUTHOR'",' >> .deployment-info.json
+      echo '"CI_COMMIT_BEFORE_SHA": "'$CI_COMMIT_BEFORE_SHA'",' >> .deployment-info.json
+      echo '"CI_COMMIT_BRANCH": "'$CI_COMMIT_BRANCH'",' >> .deployment-info.json
+      echo '"CI_DEFAULT_BRANCH": "'$CI_DEFAULT_BRANCH'",' >> .deployment-info.json
+      echo '"CI_JOB_ID": "'$CI_JOB_ID'",' >> .deployment-info.json
+      echo '"CI_PROJECT_ID": "'$CI_PROJECT_ID'",' >> .deployment-info.json
+      echo '"CI_PROJECT_NAME": "'$CI_PROJECT_NAME'",' >> .deployment-info.json
+      echo '"CI_PROJECT_TITLE": "'$CI_PROJECT_TITLE'",' >> .deployment-info.json
+      echo '"CI_RUNNER_ID": "'$CI_RUNNER_ID'",' >> .deployment-info.json
       echo '"CI_RUNNER_DESCRIPTION": "'$CI_RUNNER_DESCRIPTION'"' >> .deployment-info.json
       echo '}' >> .deployment-info.json
     - echo 'Build directory contents'
