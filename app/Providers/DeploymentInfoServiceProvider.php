@@ -32,6 +32,8 @@ class DeploymentInfoServiceProvider extends ServiceProvider
                 if(!empty($deploymentInfo['CI_COMMIT_SHA'])) {
                     config(['app.deploymentinfo.version' => $deploymentInfo['CI_COMMIT_SHA']]);
                 }
+            } else {
+                config(['app.deploymentinfo.version' => 'Version Error!']);
             }
         }
         else {
