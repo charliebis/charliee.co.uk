@@ -177,17 +177,17 @@ deploy-production:
             rsync -a $DEPLOY_DIR_BASE/live/\$PREVIOUS_VERSION $DEPLOY_DIR_BASE/previous/
             echo \"Done\"
           fi
-          echo \"Running artisan commands to prepare new live version in deploy/$VERSION\"
-          cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan optimize:clear
-          cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan config:cache
-          cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan event:cache
-          cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan route:cache
-          cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan view:cache
-          #cd $DEPLOY_DIR_BASE/deploy/$VERSION && php artisan migrate
           # Copy the new version in deploy into live
           echo \"Copying new version to live...\"
           rsync -a $DEPLOY_DIR_BASE/deploy/$VERSION $DEPLOY_DIR_BASE/live/
           echo \"Done\"
+          echo \"Running artisan commands to prepare new live version in deploy/$VERSION\"
+          cd $DEPLOY_DIR_BASE/live/$VERSION && php artisan optimize:clear
+          cd $DEPLOY_DIR_BASE/live/$VERSION && php artisan config:cache
+          cd $DEPLOY_DIR_BASE/live/$VERSION && php artisan event:cache
+          cd $DEPLOY_DIR_BASE/live/$VERSION && php artisan route:cache
+          cd $DEPLOY_DIR_BASE/live/$VERSION && php artisan view:cache
+          #cd $DEPLOY_DIR_BASE/live/$VERSION && php artisan migrate
           echo \"Creating symlink to point at new live version: /var/www/$APP_PATH/$APP_NAME to $DEPLOY_DIR_BASE/live/$VERSION\"
           # Recreate the symlink to point at the new version
           ln -sfn $DEPLOY_DIR_BASE/live/$VERSION /var/www/$APP_PATH/$APP_NAME
