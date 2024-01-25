@@ -14,7 +14,7 @@ default:
       - .env
       - .env.production
       - public/build/
-      - .version
+      - .deployment-info
 
 variables:
   VERSION: $CI_COMMIT_SHA
