@@ -15,6 +15,7 @@ default:
       - .env.production
       - public/build/
       - .deployment-info.json
+    expire_in: 1 week
 
 variables:
   VERSION: $CI_COMMIT_SHA
