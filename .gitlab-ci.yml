@@ -11,6 +11,7 @@ default:
       - vendor/
       - node_modules/
       - vite.config.js
+BREAKINGCHANGE
       - .env
       - .env.production
       - public/build/
