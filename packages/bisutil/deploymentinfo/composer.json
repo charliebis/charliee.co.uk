@@ -1,0 +1,17 @@
+{
+    "name": "bisutil/deploymentinfo",
+    "description": "Reads deployment info JSON file and exposes them as config values",
+    "autoload": {
+        "psr-4": {
+            "BisUtil\\DeploymentInfo\\": "src/"
+        }
+    },
+    "type": "library",
+    "authors": [
+        {
+            "name": "Charles Edwards",
+            "email": "charlie@charliee.co.uk"
+        }
+    ],
+    "require": {}
+}

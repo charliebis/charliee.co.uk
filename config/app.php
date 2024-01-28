@@ -201,7 +201,7 @@ return [
         /*
          * Other Service Providers...
          */
-        App\Providers\DeploymentInfoServiceProvider::class,
+        BisUtil\DeploymentInfo\Providers\DeploymentInfoServiceProvider::class,
     ],
 
     /*

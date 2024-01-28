@@ -1,23 +1,10 @@
 <?php
 
-namespace App\Providers;
+namespace BisUtil\DeploymentInfo;
 
-use Illuminate\Support\ServiceProvider;
-
-class DeploymentInfoServiceProvider extends ServiceProvider
+class DeploymentInfo
 {
-    /**
-     * Register services.
-     */
-    public function register(): void {
-        //
-    }
-
-
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void {
+    public function loadDeploymentInfo(): void {
         $path = base_path('.deployment-info.json');
         if (file_exists($path)) {
             $deploymentInfo = trim(file_get_contents($path));
