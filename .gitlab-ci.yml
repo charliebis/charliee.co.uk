@@ -2,6 +2,11 @@
 
 image: node:latest
 
+variables:
+  VERSION: $CI_COMMIT_SHA
+  DEPLOY_DIR_BASE: "/home/$DEPLOY_USER/projects/$APP_PATH/$APP_NAME"
+  DEPLOYMENT_INFO_FILE: "deployment-info.json"
+
 default:
   tags:
     - laravel
@@ -14,12 +19,8 @@ default:
       - .env
       - .env.production
       - public/build/
-      - .deployment-info.json
+      - $DEPLOYMENT_INFO_FILE
     expire_in: 1 week
-
-variables:
-  VERSION: $CI_COMMIT_SHA
-  DEPLOY_DIR_BASE: "/home/$DEPLOY_USER/projects/$APP_PATH/$APP_NAME"
 
 # List of stages for jobs, and their order of execution
 stages:
@@ -64,20 +65,20 @@ build-job:
     - cp $ENV_PRODUCTION ./.env.production
     # Create a JSON file in the project root with some variables
     - |
-      echo '{' > .deployment-info.json
-      echo '"CI_COMMIT_SHA": "'$CI_COMMIT_SHA'",' >> .deployment-info.json
-      echo '"CI_COMMIT_SHORT_SHA": "'$CI_COMMIT_SHORT_SHA'",' >> .deployment-info.json
-      echo '"CI_COMMIT_AUTHOR": "'$CI_COMMIT_AUTHOR'",' >> .deployment-info.json
-      echo '"CI_COMMIT_BEFORE_SHA": "'$CI_COMMIT_BEFORE_SHA'",' >> .deployment-info.json
-      echo '"CI_COMMIT_BRANCH": "'$CI_COMMIT_BRANCH'",' >> .deployment-info.json
-      echo '"CI_DEFAULT_BRANCH": "'$CI_DEFAULT_BRANCH'",' >> .deployment-info.json
-      echo '"CI_JOB_ID": "'$CI_JOB_ID'",' >> .deployment-info.json
-      echo '"CI_PROJECT_ID": "'$CI_PROJECT_ID'",' >> .deployment-info.json
-      echo '"CI_PROJECT_NAME": "'$CI_PROJECT_NAME'",' >> .deployment-info.json
-      echo '"CI_PROJECT_TITLE": "'$CI_PROJECT_TITLE'",' >> .deployment-info.json
-      echo '"CI_RUNNER_ID": "'$CI_RUNNER_ID'",' >> .deployment-info.json
-      echo '"CI_RUNNER_DESCRIPTION": "'$CI_RUNNER_DESCRIPTION'"' >> .deployment-info.json
-      echo '}' >> .deployment-info.json
+      echo '{' > $DEPLOYMENT_INFO_FILE
+      echo '"CI_COMMIT_SHA": "'$CI_COMMIT_SHA'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_COMMIT_SHORT_SHA": "'$CI_COMMIT_SHORT_SHA'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_COMMIT_AUTHOR": "'$CI_COMMIT_AUTHOR'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_COMMIT_BEFORE_SHA": "'$CI_COMMIT_BEFORE_SHA'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_COMMIT_BRANCH": "'$CI_COMMIT_BRANCH'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_DEFAULT_BRANCH": "'$CI_DEFAULT_BRANCH'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_JOB_ID": "'$CI_JOB_ID'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_PROJECT_ID": "'$CI_PROJECT_ID'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_PROJECT_NAME": "'$CI_PROJECT_NAME'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_PROJECT_TITLE": "'$CI_PROJECT_TITLE'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_RUNNER_ID": "'$CI_RUNNER_ID'",' >> $DEPLOYMENT_INFO_FILE
+      echo '"CI_RUNNER_DESCRIPTION": "'$CI_RUNNER_DESCRIPTION'"' >> $DEPLOYMENT_INFO_FILE
+      echo '}' >> $DEPLOYMENT_INFO_FILE
     - echo 'Build directory contents'
     - ls -la
 
