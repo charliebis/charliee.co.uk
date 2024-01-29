@@ -201,7 +201,7 @@ return [
         /*
          * Other Service Providers...
          */
-        //BisUtil\DeploymentInfo\Providers\DeploymentInfoServiceProvider::class,
+        Bisutil\DeploymentInfoLoader\Providers\DeploymentInfoServiceProvider::class,
     ],
 
     /*
@@ -217,6 +217,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'DeploymentInfo' => \Bisutil\DeploymentInfoLoader\Facades\DeploymentInfoFacade::class,
     ])->toArray(),
 
 ];

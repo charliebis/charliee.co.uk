@@ -1,14 +1,14 @@
 <?php
 
-namespace BisUtil\DeploymentInfo\Facades;
+namespace Bisutil\DeploymentInfoLoader\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
  * Class DeploymentInfoFacade
  *
- * @package BisUtil\DeploymentInfo\Facades
- * @see \BisUtil\DeploymentInfo\DeploymentInfoServiceProvider
+ * @package Bisutil\DeploymentInfoLoader\Facades
+ * @see \Bisutil\DeploymentInfoLoader\DeploymentInfoServiceProvider
  * @method __construct()
  * @method void loadDeploymentInfo()
  * @method int countConfigs(array $deploymentInfo)
@@ -28,6 +28,6 @@ class DeploymentInfoFacade extends Facade
      */
     protected static function getFacadeAccessor(): string {
         // This should match the alias you will bind your service to in the service provider
-        return 'DeploymentInfo';
+        return \Bisutil\DeploymentInfoLoader\DeploymentInfoParser::class;
     }
 }

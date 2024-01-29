@@ -1,9 +1,9 @@
 {
-    "name": "bisutil/deploymentinfo",
+    "name": "bisutil/deploymentinfoloader",
     "description": "Reads deployment info JSON file and exposes them as config values",
     "autoload": {
         "psr-4": {
-            "BisUtil\\DeploymentInfo\\": "src/"
+            "Bisutil\\DeploymentInfoLoader\\": "src/"
         }
     },
     "type": "library",
