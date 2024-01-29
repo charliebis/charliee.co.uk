@@ -3,13 +3,13 @@
 namespace BisUtil\DeploymentInfo;
 
 /**
- * Class DeploymentInfo
+ * Class DeploymentInfoParser
  *
  * @package BisUtil\DeploymentInfo\Providers
  *
  * Represents information about a deployment.
  */
-class DeploymentInfo
+class DeploymentInfoParser
 {
     /**
      * @var string

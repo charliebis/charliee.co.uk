@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Facade;
  * Class DeploymentInfoFacade
  *
  * @package BisUtil\DeploymentInfo\Facades
- * @see \BisUtil\DeploymentInfo\DeploymentInfoService
+ * @see \BisUtil\DeploymentInfo\DeploymentInfoServiceProvider
  * @method __construct()
  * @method void loadDeploymentInfo()
  * @method int countConfigs(array $deploymentInfo)

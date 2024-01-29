@@ -2,7 +2,7 @@
 
 namespace BisUtil\DeploymentInfo\Providers;
 
-use BisUtil\DeploymentInfo\DeploymentInfo;
+use BisUtil\DeploymentInfo\DeploymentInfoParser;
 use BisUtil\DeploymentInfo\Facades\DeploymentInfoFacade;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,7 +22,7 @@ class DeploymentInfoServiceProvider extends ServiceProvider
     public function register(): void {
         $this->mergeConfigFrom(__DIR__.'/../config/deployment-info.php', 'deployment-info');
         $this->app->singleton('DeploymentInfo', function ($app) {
-            return new DeploymentInfo();
+            return new DeploymentInfoParser();
         });
     }
 
