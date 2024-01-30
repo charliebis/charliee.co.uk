@@ -1,14 +1,14 @@
 <?php
 
-namespace Bisutil\DeploymentInfoLoader\Providers;
+namespace Bisutil\DeploymentInfo\Providers;
 
-use Bisutil\DeploymentInfoLoader\DeploymentInfoParser;
-use Bisutil\DeploymentInfoLoader\Facades\DeploymentInfoFacade;
+use Bisutil\DeploymentInfo\DeploymentInfoLoader;
+use Bisutil\DeploymentInfo\Facades\DeploymentInfoFacade;
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class DeploymentInfoServiceProvider
- * @package Bisutil\DeploymentInfoLoader\Providers
+ * @package Bisutil\DeploymentInfo\Providers
  *
  * This class provides the DeploymentInfo service
  */
@@ -22,7 +22,7 @@ class DeploymentInfoServiceProvider extends ServiceProvider
     public function register(): void {
         $this->mergeConfigFrom(__DIR__.'/../config/deployment-info.php', 'deployment-info');
         $this->app->singleton('DeploymentInfoFacade', function ($app) {
-            return new DeploymentInfoParser();
+            return new DeploymentInfoLoader();
         });
     }
 

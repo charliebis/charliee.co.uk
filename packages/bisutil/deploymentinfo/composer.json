@@ -3,7 +3,7 @@
     "description": "Reads deployment info JSON file and exposes them as config values",
     "autoload": {
         "psr-4": {
-            "Bisutil\\DeploymentInfoLoader\\": "src/"
+            "Bisutil\\DeploymentInfo\\": "src/"
         }
     },
     "type": "library",

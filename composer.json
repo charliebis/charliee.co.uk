@@ -25,7 +25,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "Bisutil\\DeploymentInfoLoader\\": "packages/bisutil/deploymentinfoloader/src/"
+            "Bisutil\\DeploymentInfo\\": "packages/bisutil/deploymentinfo/src/"
         }
     },
     "autoload-dev": {

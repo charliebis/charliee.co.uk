@@ -1,4 +1,4 @@
-# DeploymentInfoLoader
+# DeploymentInfo
 
 ## Parses JSON encoded deployment vars from text file in the project
 
@@ -9,7 +9,7 @@ The JSON encoded array can be multidimensional, offering flexibility in how you 
 ## Installation
 
 Add the following line to your composer.json file:
-"Bisutil\\DeploymentInfo\\": "packages/bisutil/deploymentinfoloader/src/"
+"Bisutil\\DeploymentInfo\\": "packages/bisutil/deploymentinfo/src/"
 
 to the autoload section. For example:
 
@@ -19,7 +19,7 @@ to the autoload section. For example:
         "App\\": "app/",
         "Database\\Factories\\": "database/factories/",
         "Database\\Seeders\\": "database/seeders/",
-        "Bisutil\\DeploymentInfoLoader\\": "packages/bisutil/deploymentinfoloader/src/"
+        "Bisutil\\DeploymentInfo\\": "packages/bisutil/deploymentinfo/src/"
     }
 },
 ```
@@ -41,7 +41,7 @@ Add the service provider in the config/app.php file, e.g.
 /*
 * Other Service Providers...
 */
-Bisutil\DeploymentInfoLoader\Providers\DeploymentInfoServiceProvider::class,
+Bisutil\DeploymentInfo\Providers\DeploymentInfoServiceProvider::class,
 ```
 
 and the facade alias, e.g.
@@ -49,7 +49,7 @@ and the facade alias, e.g.
 ```PHP
 'aliases' => Facade::defaultAliases()->merge([
     // 'ExampleClass' => App\Example\ExampleClass::class,
-    'DeploymentInfo' => \Bisutil\DeploymentInfoLoader\Facades\DeploymentInfoFacade::class,
+    'DeploymentInfo' => \Bisutil\DeploymentInfo\Facades\DeploymentInfoFacade::class,
 ])->toArray(),
 ```
 
