@@ -198,10 +198,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        /*
-         * Other Service Providers...
-         */
-        BISUtil\DeploymentInfo\Providers\DeploymentInfoServiceProvider::class,
     ],
 
     /*
@@ -217,7 +213,5 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-        'DeploymentInfo' => \BISUtil\DeploymentInfo\Facades\DeploymentInfoFacade::class,
     ])->toArray(),
-
 ];

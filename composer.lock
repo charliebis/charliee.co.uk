@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9088dea39ceda0ebe2bf09607e628810",
+    "content-hash": "b6e8e98c8524cc0142e29a3ffbc7e67a",
     "packages": [
         {
             "name": "bisutil/deploymentinfo",
-            "version": "v1.0.10",
+            "version": "v1.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/charliebis/deploymentinfo.git",
-                "reference": "ee2fee07ab9bbf42727ab0406f0e212e5f5ce884"
+                "reference": "92385767b4a2eac04d81cf0f1c0089d5fc2126f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charliebis/deploymentinfo/zipball/ee2fee07ab9bbf42727ab0406f0e212e5f5ce884",
-                "reference": "ee2fee07ab9bbf42727ab0406f0e212e5f5ce884",
+                "url": "https://api.github.com/repos/charliebis/deploymentinfo/zipball/92385767b4a2eac04d81cf0f1c0089d5fc2126f4",
+                "reference": "92385767b4a2eac04d81cf0f1c0089d5fc2126f4",
                 "shasum": ""
             },
             "require": {
@@ -33,7 +33,10 @@
                 "laravel": {
                     "providers": [
                         "BISUtil\\DeploymentInfo\\Providers\\DeploymentInfoServiceProvider"
-                    ]
+                    ],
+                    "aliases": {
+                        "DeploymentInfo": "BISUtil\\DeploymentInfo\\Facades\\DeploymentInfoFacade"
+                    }
                 }
             },
             "autoload": {
@@ -54,10 +57,10 @@
             ],
             "description": "Reads deployment info JSON file and exposes them as config values",
             "support": {
-                "source": "https://github.com/charliebis/deploymentinfo/tree/v1.0.10",
+                "source": "https://github.com/charliebis/deploymentinfo/tree/v1.0.12",
                 "issues": "https://github.com/charliebis/deploymentinfo/issues"
             },
-            "time": "2024-02-03T17:04:26+00:00"
+            "time": "2024-02-03T17:45:16+00:00"
         },
         {
             "name": "brick/math",

@@ -9,7 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "bisutil/deploymentinfo": "^1.0.10",
+        "bisutil/deploymentinfo": "^1.0.12",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
@@ -24,12 +24,6 @@
         "phpunit/phpunit": "^10.0",
         "spatie/laravel-ignition": "^2.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/charliebis/deploymentinfo.git"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "App\\": "app/",
@@ -72,5 +66,11 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "deploymentinfo": {
+            "type": "vcs",
+            "url": "https://github.com/charliebis/deploymentinfo.git"
+        }
+    }
 }
