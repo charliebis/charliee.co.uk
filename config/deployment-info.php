@@ -22,8 +22,8 @@ return [
     | version_key tells DeploymentInfo which value in the JSON file constitutes the version of the app
     |--------------------------------------------------------------------------
     |
-    | Setting this to CI_COMMIT_SHA as this site isn't using version tagging.
+    | This is likely to be a Git version tag.
     |
     */
-    'version_key' => env('DEPLOYMENT_INFO_VERSION_KEY', 'CI_COMMIT_SHA'),
+    'version_key' => env('DEPLOYMENT_INFO_VERSION_KEY', 'CI_COMMIT_TAG'),
 ];
