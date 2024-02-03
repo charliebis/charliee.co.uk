@@ -4,8 +4,61 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "121ea3a2fffe49b3ef9aa4d064b28c19",
+    "content-hash": "6ef8c7a20e95959675eacf582d0abd3d",
     "packages": [
+        {
+            "name": "bisutil/deploymentinfo",
+            "version": "v1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/charliebis/deploymentinfo.git",
+                "reference": "1676f4a1e6eb899fc96b74add31a3a8dfcd6741b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/charliebis/deploymentinfo/zipball/1676f4a1e6eb899fc96b74add31a3a8dfcd6741b",
+                "reference": "1676f4a1e6eb899fc96b74add31a3a8dfcd6741b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/framework": "^8.0|^9.0|^10.0",
+                "php": "^8.0.2|^8.1"
+            },
+            "require-dev": {
+                "laravel/laravel": "^8.0|^9.0|^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bisutil\\DeploymentInfo\\Providers\\DeploymentInfoServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bisutil\\DeploymentInfo\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Bisutil\\DeploymentInfo\\Tests\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Charles Edwards",
+                    "email": "charlie@charliee.co.uk"
+                }
+            ],
+            "description": "Reads deployment info JSON file and exposes them as config values",
+            "support": {
+                "source": "https://github.com/charliebis/deploymentinfo/tree/v1.0.8",
+                "issues": "https://github.com/charliebis/deploymentinfo/issues"
+            },
+            "time": "2024-02-03T13:29:10+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.11.0",
