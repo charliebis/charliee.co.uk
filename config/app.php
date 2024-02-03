@@ -59,7 +59,7 @@ return [
     'asset_url' => env('ASSET_URL'),
 
     'gtm' => [
-        'site_id' => env('GTM_SITE_ID'),
+        'site_id' => env('GTM_SITE_ID', ''),
     ],
 
     /*
