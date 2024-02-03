@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e21b98a68f82f356d7d92eee0290ff95",
+    "content-hash": "9088dea39ceda0ebe2bf09607e628810",
     "packages": [
         {
             "name": "bisutil/deploymentinfo",
-            "version": "v1.0.9",
+            "version": "v1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/charliebis/deploymentinfo.git",
-                "reference": "238e28b4f9d6faf5b21310e51427480ddf70303a"
+                "reference": "ee2fee07ab9bbf42727ab0406f0e212e5f5ce884"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charliebis/deploymentinfo/zipball/238e28b4f9d6faf5b21310e51427480ddf70303a",
-                "reference": "238e28b4f9d6faf5b21310e51427480ddf70303a",
+                "url": "https://api.github.com/repos/charliebis/deploymentinfo/zipball/ee2fee07ab9bbf42727ab0406f0e212e5f5ce884",
+                "reference": "ee2fee07ab9bbf42727ab0406f0e212e5f5ce884",
                 "shasum": ""
             },
             "require": {
@@ -32,18 +32,18 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Bisutil\\DeploymentInfo\\Providers\\DeploymentInfoServiceProvider"
+                        "BISUtil\\DeploymentInfo\\Providers\\DeploymentInfoServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Bisutil\\DeploymentInfo\\": "src/"
+                    "BISUtil\\DeploymentInfo\\": "src/"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Bisutil\\DeploymentInfo\\Tests\\": "tests/"
+                    "BISUtil\\DeploymentInfo\\Tests\\": "tests/"
                 }
             },
             "authors": [
@@ -54,10 +54,10 @@
             ],
             "description": "Reads deployment info JSON file and exposes them as config values",
             "support": {
-                "source": "https://github.com/charliebis/deploymentinfo/tree/v1.0.9",
+                "source": "https://github.com/charliebis/deploymentinfo/tree/v1.0.10",
                 "issues": "https://github.com/charliebis/deploymentinfo/issues"
             },
-            "time": "2024-02-03T16:52:58+00:00"
+            "time": "2024-02-03T17:04:26+00:00"
         },
         {
             "name": "brick/math",
