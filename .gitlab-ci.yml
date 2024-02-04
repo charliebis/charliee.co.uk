@@ -142,8 +142,8 @@ lint-test-job:
     - ls -la
     - echo "stage lint-test-job script is now running"
     # Set correct file and dir permissions - owner and group need full permissions
-    - find ./ -type f -exec chmod 664 {} \;
-    - find ./ -type d -exec chmod 775 {} \;
+    #- find ./ -type f -exec chmod 664 {} \;
+    #- find ./ -type d -exec chmod 775 {} \;
     - php artisan optimize:clear
     - php artisan config:cache
     - ./vendor/bin/pint --test -v
