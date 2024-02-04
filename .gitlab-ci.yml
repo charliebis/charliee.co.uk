@@ -109,6 +109,7 @@ unit-test-job:
   script:
     - echo "stage unit-test-job script is now running"
     - cp $ENV_TESTING ./.env
+    - npm run prod
     - ls -la
     # Set correct file and dir permissions - owner and group need full permissions
     - find ./ -type f -exec chmod 664 {} \;
