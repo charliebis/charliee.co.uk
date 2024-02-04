@@ -18,8 +18,8 @@ default:
       - storage/
       - vite.config.js
       - .env
-      - .env.production
-      - public/build/
+      #- .env.production
+      #- public/build/
       - $DEPLOYMENT_INFO_FILE
     expire_in: 1 week
 
@@ -65,10 +65,8 @@ build-job:
     - mkdir -p storage/framework/testing
     - mkdir -p storage/framework/views
     - mkdir -p storage/logs
-    - composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
+    - composer install --optimize-autoloader --no-interaction --prefer-dist
     - npm install
-    # Inject .env.production file
-    - cp $ENV_PRODUCTION ./.env.production
     # Create a JSON file in the project root with some variables
     - |
       echo '{' > $DEPLOYMENT_INFO_FILE
@@ -127,7 +125,7 @@ lint-test-job:
   script:
     - ls -la
     - echo "stage lint-test-job script is now running"
-    - ./vendor/bin/pint
+    - ./vendor/bin/pint --test -v
 
 # This job runs in the deploy stage.
 deploy-production:
@@ -162,6 +160,8 @@ deploy-production:
     - rm -rf tests
     # Inject .env file using CI/CD variable. .env is overwriting previous testing one
     - cp $ENV ./.env
+    # Inject .env.production file
+    - cp $ENV_PRODUCTION ./.env.production
     - npm run prod
     # Set correct file and dir permissions - owner and group need full permissions
     - find ./ -type f -exec chmod 664 {} \;
