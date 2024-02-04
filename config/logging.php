@@ -117,7 +117,7 @@ return [
         ],
 
         'emergency' => [
-            'path' => storage_path('logs/laravel.log'),            
+            'path' => storage_path('logs/laravel.log'),
             'permissions' => 0755,
         ],
     ],

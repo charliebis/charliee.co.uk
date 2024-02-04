@@ -94,7 +94,7 @@ unit-test-job:
     - staging
   script:
     - echo "stage unit-test-job script is now running"
-    #- ./vendor/bin/pint
+    #- ./vendor/bin/phpunit
 
 # This job runs in the test stage.
 lint-test-job:
@@ -105,7 +105,7 @@ lint-test-job:
     - staging
   script:
     - echo "stage lint-test-job script is now running"
-    #- ./vendor/bin/phpunit
+    #- ./vendor/bin/pint
 
 # This job runs in the deploy stage.
 deploy-production:
