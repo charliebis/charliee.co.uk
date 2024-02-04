@@ -15,6 +15,7 @@ default:
     paths:
       - vendor/
       - node_modules/
+      - storage/
       - vite.config.js
       - .env
       - .env.production
@@ -57,12 +58,23 @@ build-job:
     - composer -V
     - echo "Current directory:"
     - pwd
+    # Ensure necessary dirs are present
+    - echo "Creating storage/ dirs:"
+    - mkdir -p storage/framework/cache/data
+    - mkdir -p storage/framework/sessions
+    - mkdir -p storage/framework/testing
+    - mkdir -p storage/framework/views
+    - mkdir -p storage/logs
+    # Set correct file and dir permissions - owner and group need full permissions
+    - find ./ -type f -exec chmod 664 {} \;
+    - find ./ -type d -exec chmod 775 {} \;
     - composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
     - npm install
-    - npm run prod
-    # Inject .env and .env.production files using CI/CD variables
-    - cp $ENV ./.env
-    - cp $ENV_PRODUCTION ./.env.production
+    # Inject testing env file into ,env using CI/CD variable
+    - cp $ENV_TESTING ./.env
+    - php artisan key:generate
+    - php artisan optimize:clear
+    - php artisan config:cache
     # Create a JSON file in the project root with some variables
     - |
       echo '{' > $DEPLOYMENT_INFO_FILE
@@ -94,18 +106,18 @@ unit-test-job:
     - staging
   script:
     - echo "stage unit-test-job script is now running"
-    #- ./vendor/bin/phpunit
+    - php artisan test
 
 # This job runs in the test stage.
 lint-test-job:
-  stage: test # It can run at the same time as unit-test-job (in parallel).
+  stage: test # It can run at the same time as unit-test-job.
   only:
     - main
     - master
     - staging
   script:
     - echo "stage lint-test-job script is now running"
-    #- ./vendor/bin/pint
+    - ./vendor/bin/pint
 
 # This job runs in the deploy stage.
 deploy-production:
@@ -135,18 +147,13 @@ deploy-production:
     - ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     # Delete unnecessary files
-    - rm .env.example .env.production.example .gitignore .gitattributes .gitlab-ci.yml
+    - rm .env.example .env.production.example .gitignore .gitattributes .gitlab-ci.yml phpunit.xml phpunit.xml.bak
     - rm -rf .git
-    # Ensure necessary dirs are present
-    - echo "Creating storage/ dirs:"
-    - mkdir -p storage/framework/cache/data
-    - mkdir -p storage/framework/sessions
-    - mkdir -p storage/framework/testing
-    - mkdir -p storage/framework/views
-    - mkdir -p storage/logs
-    # Set correct file and dir permissions - owner and group need full permissions
-    - find ./ -type f -exec chmod 664 {} \;
-    - find ./ -type d -exec chmod 775 {} \;
+    - rm -rf tests
+    # Inject .env and .env.production files using CI/CD variables. .env is overwriting previous testing one
+    - cp $ENV ./.env
+    - cp $ENV_PRODUCTION ./.env.production
+    - npm run prod
   script:
     - echo "deploy-production > script script started:"
     - echo "All files and directories:"
