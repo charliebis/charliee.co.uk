@@ -67,14 +67,8 @@ build-job:
     - mkdir -p storage/logs
     - composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
     - npm install
-    # Inject testing env file into ,env using CI/CD variable
-    - cp $ENV_TESTING ./.env
-    # Set correct file and dir permissions - owner and group need full permissions
-    - find ./ -type f -exec chmod 664 {} \;
-    - find ./ -type d -exec chmod 775 {} \;
-    - php artisan key:generate
-    - php artisan optimize:clear
-    - php artisan config:cache
+    # Inject .env.production file
+    - cp $ENV_PRODUCTION ./.env.production
     # Create a JSON file in the project root with some variables
     - |
       echo '{' > $DEPLOYMENT_INFO_FILE
@@ -104,8 +98,23 @@ unit-test-job:
     - main
     - master
     - staging
+  before_script:
+    - echo "unit-test-job > before_script started. Preparing test environment:"
+    - echo "Installing PHP"
+    - apt-get update -y && apt-get install php-cli php-bcmath php-curl php-json php-mbstring php-mysql php-tokenizer php-xml php-zip -y
+    - echo "Installing composer"
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php');"
+    - mv composer.phar /usr/local/bin/composer
   script:
+    - cp $ENV_TESTING ./.env
+    - ls -la
     - echo "stage unit-test-job script is now running"
+    - php artisan key:generate
+    - php artisan optimize:clear
+    - php artisan config:cache
     - php artisan test
 
 # This job runs in the test stage.
@@ -116,6 +125,7 @@ lint-test-job:
     - master
     - staging
   script:
+    - ls -la
     - echo "stage lint-test-job script is now running"
     - ./vendor/bin/pint
 
@@ -150,10 +160,12 @@ deploy-production:
     - rm .env.example .env.production.example .gitignore .gitattributes .gitlab-ci.yml phpunit.xml phpunit.xml.bak
     - rm -rf .git
     - rm -rf tests
-    # Inject .env and .env.production files using CI/CD variables. .env is overwriting previous testing one
+    # Inject .env file using CI/CD variable. .env is overwriting previous testing one
     - cp $ENV ./.env
-    - cp $ENV_PRODUCTION ./.env.production
     - npm run prod
+    # Set correct file and dir permissions - owner and group need full permissions
+    - find ./ -type f -exec chmod 664 {} \;
+    - find ./ -type d -exec chmod 775 {} \;
   script:
     - echo "deploy-production > script script started:"
     - echo "All files and directories:"
