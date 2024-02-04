@@ -17,9 +17,6 @@ default:
       - node_modules/
       - storage/
       - vite.config.js
-      #- .env
-      #- .env.production
-      #- public/build/
       - $DEPLOYMENT_INFO_FILE
     expire_in: 1 week
 
@@ -112,8 +109,8 @@ unit-test-job:
     - npm run prod
     - ls -la
     # Set correct file and dir permissions - owner and group need full permissions
-    - find ./ -type f -exec chmod 664 {} \;
-    - find ./ -type d -exec chmod 775 {} \;
+    #- find ./ -type f -exec chmod 664 {} \;
+    #- find ./ -type d -exec chmod 775 {} \;
     - php artisan optimize:clear
     - php artisan config:cache
     - php artisan test
