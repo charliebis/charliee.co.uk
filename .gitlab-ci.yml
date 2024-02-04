@@ -107,7 +107,7 @@ unit-test-job:
     - php -r "unlink('composer-setup.php');"
     - mv composer.phar /usr/local/bin/composer
   script:
-    - echo "stage unit-test-job script is now running"
+    - echo "unit-test-job script is now running"
     - cp $ENV_TESTING ./.env
     - npm run prod
     - ls -la
@@ -125,9 +125,27 @@ lint-test-job:
     - main
     - master
     - staging
+  before_script:
+    - echo "lint-test-job > before_script started. Preparing test environment:"
+    - echo "Installing PHP"
+    - apt-get update -y && apt-get install php-cli php-bcmath php-curl php-json php-mbstring php-mysql php-tokenizer php-xml php-zip -y
+    - echo "Installing composer"
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php');"
+    - mv composer.phar /usr/local/bin/composer
   script:
+    - echo "lint-test-job script is now running"
+    - cp $ENV_TESTING ./.env
+    - npm run prod
     - ls -la
     - echo "stage lint-test-job script is now running"
+    # Set correct file and dir permissions - owner and group need full permissions
+    - find ./ -type f -exec chmod 664 {} \;
+    - find ./ -type d -exec chmod 775 {} \;
+    - php artisan optimize:clear
+    - php artisan config:cache
     - ./vendor/bin/pint --test -v
 
 # This job runs in the deploy stage.
