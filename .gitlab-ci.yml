@@ -17,7 +17,7 @@ default:
       - node_modules/
       - storage/
       - vite.config.js
-      - .env
+      #- .env
       #- .env.production
       #- public/build/
       - $DEPLOYMENT_INFO_FILE
@@ -110,7 +110,6 @@ unit-test-job:
     - cp $ENV_TESTING ./.env
     - ls -la
     - echo "stage unit-test-job script is now running"
-    - php artisan key:generate
     - php artisan optimize:clear
     - php artisan config:cache
     - php artisan test
