@@ -107,9 +107,12 @@ unit-test-job:
     - php -r "unlink('composer-setup.php');"
     - mv composer.phar /usr/local/bin/composer
   script:
+    - echo "stage unit-test-job script is now running"
     - cp $ENV_TESTING ./.env
     - ls -la
-    - echo "stage unit-test-job script is now running"
+    # Set correct file and dir permissions - owner and group need full permissions
+    - find ./ -type f -exec chmod 664 {} \;
+    - find ./ -type d -exec chmod 775 {} \;
     - php artisan optimize:clear
     - php artisan config:cache
     - php artisan test
