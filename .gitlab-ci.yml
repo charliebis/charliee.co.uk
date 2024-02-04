@@ -1,4 +1,4 @@
-# CICD script for Laravel sites on Abydos
+# CICD script for Laravel sites on dakara
 
 image: node:latest
 
@@ -10,7 +10,7 @@ variables:
 default:
   tags:
     - laravel
-    - abydos
+    - dakara
   artifacts:
     paths:
       - vendor/
@@ -108,9 +108,6 @@ unit-test-job:
     - cp $ENV_TESTING ./.env
     - npm run prod
     - ls -la
-    # Set correct file and dir permissions - owner and group need full permissions
-    #- find ./ -type f -exec chmod 664 {} \;
-    #- find ./ -type d -exec chmod 775 {} \;
     - php artisan optimize:clear
     - php artisan config:cache
     - php artisan test
@@ -138,9 +135,6 @@ lint-test-job:
     - npm run prod
     - ls -la
     - echo "stage lint-test-job script is now running"
-    # Set correct file and dir permissions - owner and group need full permissions
-    #- find ./ -type f -exec chmod 664 {} \;
-    #- find ./ -type d -exec chmod 775 {} \;
     - php artisan optimize:clear
     - php artisan config:cache
     - ./vendor/bin/pint --test -v
