@@ -4,11 +4,13 @@
          colors="true">
     <testsuites>
         <testsuite name="Unit">
-            <directory suffix="Test.php">./tests/Unit</directory>
-            <directory suffix="Test.php">./vendor/bisutil/deploymentinfo/tests</directory>
+            <directory>./tests/Unit</directory>
         </testsuite>
         <testsuite name="Feature">
-            <directory suffix="Test.php">./tests/Feature</directory>
+            <directory>./tests/Feature</directory>
+        </testsuite>
+        <testsuite name="Package">
+            <directory>./vendor/bisutil/deploymentinfo/tests</directory>
         </testsuite>
     </testsuites>
     <php>
@@ -24,7 +26,7 @@
     </php>
     <source>
         <include>
-            <directory suffix=".php">./app</directory>
+            <directory>./app</directory>
         </include>
     </source>
 </phpunit>
