@@ -10,7 +10,7 @@
             <directory>./tests/Feature</directory>
         </testsuite>
         <testsuite name="Package">
-            <directory>./vendor/bisutil/deploymentinfo/tests</directory>
+            <directory>./vendor/bisutil/deploymentinfo/tests/Unit</directory>
         </testsuite>
     </testsuites>
     <php>
