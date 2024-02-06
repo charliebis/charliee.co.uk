@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bbf9b63e30fe4cc6d76223dba90af4c2",
+    "content-hash": "c3c29902848bc3e88e55360839b48ddd",
     "packages": [
         {
             "name": "bisutil/deploymentinfo",
-            "version": "v1.0.15",
+            "version": "v1.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/charliebis/deploymentinfo.git",
-                "reference": "fee397493bba56a5d7a8954a0c1c24a2b6653c82"
+                "reference": "fdf7ecd836cb2b410f04921da6e59fc7c8bc3517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charliebis/deploymentinfo/zipball/fee397493bba56a5d7a8954a0c1c24a2b6653c82",
-                "reference": "fee397493bba56a5d7a8954a0c1c24a2b6653c82",
+                "url": "https://api.github.com/repos/charliebis/deploymentinfo/zipball/fdf7ecd836cb2b410f04921da6e59fc7c8bc3517",
+                "reference": "fdf7ecd836cb2b410f04921da6e59fc7c8bc3517",
                 "shasum": ""
             },
             "require": {
@@ -57,10 +57,10 @@
             ],
             "description": "Reads deployment info JSON file and exposes them as config values",
             "support": {
-                "source": "https://github.com/charliebis/deploymentinfo/tree/v1.0.15",
+                "source": "https://github.com/charliebis/deploymentinfo/tree/v1.0.16",
                 "issues": "https://github.com/charliebis/deploymentinfo/issues"
             },
-            "time": "2024-02-05T23:17:32+00:00"
+            "time": "2024-02-06T22:26:52+00:00"
         },
         {
             "name": "brick/math",
