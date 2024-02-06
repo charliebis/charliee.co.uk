@@ -4,7 +4,7 @@ image: node:latest
 
 variables:
   VERSION: $CI_COMMIT_SHA
-  DEPLOY_DIR_BASE: "/home/$DEPLOY_USER/projects/$APP_PATH/$APP_NAME"
+  DEPLOY_DIR_BASE: "/home/$DEPLOY_SSH_USER_DAKARA/projects/$APP_PATH/$APP_NAME"
   DEPLOYMENT_INFO_FILE: "deployment-info.json"
 
 default:
@@ -151,20 +151,20 @@ deploy-production:
     - apt-get update -y && apt-get install openssh-client -y
     ## Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
-    ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+    ## Add the SSH key stored in DEPLOY_SSH_PRIVATE_KEY_DAKARA variable to the agent store
     ## We're using tr to fix line endings which makes ed25519 keys work
     ## without extra base64 encoding.
     ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$DEPLOY_SSH_PRIVATE_KEY_DAKARA" | tr -d '\r' | ssh-add -
     ## Create the SSH directory and give it the right permissions
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_ed25519_gitlab_deploy
+    - echo "$DEPLOY_SSH_PRIVATE_KEY_DAKARA" | tr -d '\r' > ~/.ssh/id_ed25519_gitlab_deploy
     - chmod 600 ~/.ssh/id_ed25519_gitlab_deploy
     ## Use ssh-keyscan to scan the keys of your private server. Replace gitlab.com
     ## with your own domain name. You can copy and repeat that command if you have
     ## more than one server to connect to.
-    - ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+    - ssh-keyscan -H $DEPLOY_HOST_DAKARA >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     # Delete unnecessary files
     - rm .env.example .env.production.example .gitignore .gitattributes .gitlab-ci.yml phpunit.xml phpunit.xml.bak
@@ -186,21 +186,21 @@ deploy-production:
     # if this is the first deployment of this project
     - echo "Preparing previous directory"
     - |
-      ssh $DEPLOY_USER@$DEPLOY_HOST "
+      ssh $DEPLOY_SSH_USER_DAKARA@$DEPLOY_HOST_DAKARA "
       if [ ! -d $DEPLOY_DIR_BASE/previous ]; then             # Check if $DEPLOY_DIR_BASE/previous doesn't exist
         mkdir -m 775 $DEPLOY_DIR_BASE/previous                # Create the directory with permissions 775
       fi
       "
     - echo "Preparing deploy directory"
     - |
-      ssh $DEPLOY_USER@$DEPLOY_HOST "
+      ssh $DEPLOY_SSH_USER_DAKARA@$DEPLOY_HOST_DAKARA "
       if [ ! -d $DEPLOY_DIR_BASE/deploy ]; then               # Check if $DEPLOY_DIR_BASE/deploy doesn't exist
         mkdir -m 775 $DEPLOY_DIR_BASE/deploy                  # Create the directory with permissions 775
       fi
       "
     - echo "Preparing live directory"
     - |
-      ssh $DEPLOY_USER@$DEPLOY_HOST "
+      ssh $DEPLOY_SSH_USER_DAKARA@$DEPLOY_HOST_DAKARA "
       if [ ! -d $DEPLOY_DIR_BASE/live ]; then                 # Check if $DEPLOY_DIR_BASE/live doesn't exist
         mkdir -m 775 $DEPLOY_DIR_BASE/live                    # Create the directory with permissions 775
       fi
@@ -247,24 +247,24 @@ deploy-production:
       " > deploy.sh
     # Copy built code to the deploy directory on the live server
     - echo "Copying new version to remote host..."
-    - scp -r . $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_DIR_BASE/deploy/$VERSION
+    - scp -r . $DEPLOY_SSH_USER_DAKARA@$DEPLOY_HOST_DAKARA:$DEPLOY_DIR_BASE/deploy/$VERSION
     - echo "Done"
     # Configure
     - echo "Configuring live environment..."
-    - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/deploy/$VERSION && sh -x deploy.sh"
+    - ssh $DEPLOY_SSH_USER_DAKARA@$DEPLOY_HOST_DAKARA "cd $DEPLOY_DIR_BASE/deploy/$VERSION && sh -x deploy.sh"
     - echo "Done"
     - echo "Deleting deploy.sh from remote host..."
-    - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_DIR_BASE/live/$VERSION && rm deploy.sh"
+    - ssh $DEPLOY_SSH_USER_DAKARA@$DEPLOY_HOST_DAKARA "cd $DEPLOY_DIR_BASE/live/$VERSION && rm deploy.sh"
     - echo "Done"
     # Clean up
     - echo "Running purge script to delete old deploy versions..."
-    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER $APP_PATH/$APP_NAME/deploy"
+    - ssh $DEPLOY_SSH_USER_DAKARA@$DEPLOY_HOST_DAKARA "sudo $PURGE_PROJECTS_SCRIPT_DAKARA $DEPLOY_SSH_USER_DAKARA $APP_PATH/$APP_NAME/deploy"
     - echo "Done"
     - echo "Running purge script to delete old previous versions..."
-    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER $APP_PATH/$APP_NAME/previous"
+    - ssh $DEPLOY_SSH_USER_DAKARA@$DEPLOY_HOST_DAKARA "sudo $PURGE_PROJECTS_SCRIPT_DAKARA $DEPLOY_SSH_USER_DAKARA $APP_PATH/$APP_NAME/previous"
     - echo "Done"
     - echo "Running purge script to delete old live versions..."
-    - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo /usr/bin/purge-projects.sh $DEPLOY_USER $APP_PATH/$APP_NAME/live"
+    - ssh $DEPLOY_SSH_USER_DAKARA@$DEPLOY_HOST_DAKARA "sudo $PURGE_PROJECTS_SCRIPT_DAKARA $DEPLOY_SSH_USER_DAKARA $APP_PATH/$APP_NAME/live"
     - echo "Done"
   after_script:
     - echo "deploy-production > after_script script started:"
