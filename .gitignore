@@ -12,6 +12,7 @@
 .env
 .env.backup
 .env.production
+.env.testing
 .editorconfig
 Homestead.json
 Homestead.yaml
