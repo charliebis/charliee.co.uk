@@ -35,7 +35,6 @@ build-job:
   before_script:
     - echo "build-job > before_script started. Preparing build environment:"
     - echo "Installing PHP"
-    - apt-get install software-properties-common\nsudo add-apt-repository ppa:ondrej/php\nsudo apt-get update
     - apt-get update -y && apt-get install php php-fpm php-calendar php-ctype php-curl php-dom php-exif php-ffi php-fileinfo php-ftp php-gd php-gettext php-iconv php-imagick php-imap php-intl php-json php-libxml php-mbstring php-mysqli php-pcntl php-pcre php-PDO php-pdo-mysql php-Phar php-posix php-readline php-shmop php-simplexml php-soap php-sockets php-sodium php-sysvmsg php-sysvsem php-sysvshm php-tokenizer php-xml php-xmlreader php-xmlrpc php-xmlwriter php-xsl php-zip php-opcache -y
     - echo "Installing composer"
     - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
