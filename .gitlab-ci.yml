@@ -166,7 +166,7 @@ deploy-production:
     - ssh-keyscan -H $DEPLOY_HOST_DAKARA >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     # Delete unnecessary files
-    - rm .env.example .env.production.example .gitignore .gitattributes .gitlab-ci.yml phpunit.xml phpunit.xml.bak
+    - rm -f .env.example .env.production.example .gitignore .gitattributes .gitlab-ci.yml phpunit.xml phpunit.xml.bak
     - rm -rf .git
     - rm -rf tests
     # Inject .env file using CI/CD variable. .env is overwriting previous testing one
