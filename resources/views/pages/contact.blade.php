@@ -54,6 +54,14 @@
                             <input type="email" id="email" name="email" required class="input input-bordered input-secondary w-full h-auto py-3" maxlength="255" />
                         </div>
                     </div>
+                    <div class="flex justify-center content-start gap-8 w-full lg:w-4/5 mx-auto hidden">
+                        <div class="form-control w-full mb-3 md:mb-2">
+                            <label class="label" for="subject">
+                                <span class="text-xl text-primary-content">Subject</span>
+                            </label>
+                            <input type="text" id="subject" name="subject" required class="input input-bordered input-secondary bg-primary w-full h-auto py-3" maxlength="255" />
+                        </div>
+                    </div>
                     <div class="flex justify-center content-start gap-8 w-full lg:w-4/5 mx-auto">
                         <div class="form-control w-full">
                             <label class="label" for="message">

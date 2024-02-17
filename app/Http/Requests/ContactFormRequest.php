@@ -59,6 +59,7 @@ class ContactFormRequest extends FormRequest
             'name' => $this->input('name'),
             'email' => $this->input('email'),
             'message' => $this->input('message'),
+            'subject' => $this->input('subject'),
         ];
     }
 }

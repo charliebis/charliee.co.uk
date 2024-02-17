@@ -24,7 +24,12 @@ class ContactController extends Controller
 
     public function sendMail(ContactFormRequest $message, Recipient $recipient): View
     {
-        $recipient->notify(new ContactFormMessage($message));
+        //  Honeypot check - subject is a hidden field and not supposed to be filled in by a real person.
+        //  If there is a value in subject, assume it's a spam-bot
+        $subject = $message->getInputValues()['subject'];
+        if (empty($subject)) {
+            $recipient->notify(new ContactFormMessage($message));
+        }
 
         return view('pages.contact', [
             'success' => 'Thanks for your message! I will get back to you shortly!',
