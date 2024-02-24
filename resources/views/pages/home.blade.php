@@ -61,9 +61,9 @@
     <div class="lg:w-1/2 flex-grow bg-primary text-primary-content rounded-box place-items-center p-8 mx-3 2xl:mx-0">
         <h2 class="text-center text-base-content font-bold text-2xl mb-6">Developing Skills</h2>
         <ul class="list-disc pl-4 text-lg lg:text-xl">
-            <li class="mb-3">After gaining valuable experience with Laravel 10 throughout the past year, I am eagerly anticipating the upcoming release of <a href="https://laravel-news.com/laravel-11" class="link" title="Laravel 11" target="_blank">Laravel 11</a> later this year. I am committed to further expanding my expertise in this framework as I move forward.</li>
+            <li class="mb-3">After gaining valuable experience with Laravel 10 throughout the past year, I am eagerly anticipating the upcoming release of <a href="https://laravel-news.com/laravel-11" class="link" title="Laravel 11" target="_blank">Laravel 11</a>. I am committed to further expanding my expertise in this framework as I move forward.</li>
             <li class="mb-3">I am in the early stages of learning Vue.js. After many years of experience with Vanilla Javascript and jQuery, it's time to learn a more modern front-end framework.</li>
-            <li class="mb-3">I am currently in the process of setting up GitLab as a self-hosted installation, including CI/CD runners. This is to improve my capabilities with this software.</li>
+            <li class="mb-3">I have recently set up GitLab as a self-hosted installation, as well as a CI/CD runner. This has enabled me to set up CI/CD pipelines for my projects, while improving my knowledge of this software.</li>
         </ul>
     </div>
 </section>
