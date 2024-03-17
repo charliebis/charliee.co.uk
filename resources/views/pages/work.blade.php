@@ -28,8 +28,8 @@
         </div>
         <p class="text-lg lg:text-xl pt-6 pb-6">
             My current, full-time role. <a class="link" href="https://www.fusemetrix.com" title="FuseMetrix" target="_blank">FuseMetrix</a> is a multi-tenant, Software as a Service (SaaS) company, providing a
-            variety of web-based office systems, primarily to leisure attraction businesses, such as open farms, water parks, skiing and zip lining centres . This includes online booking, check-in, EPOS, CRM and finance
-            systems.
+            variety of web-based ERP systems, primarily to leisure attraction businesses, such as racing circuits, water parks, open farms, skiing and zip lining centres.
+            This includes typical ERP modules, for example online booking, check-in, EPOS, CRM and finance systems.
         </p>
         <p class="text-lg lg:text-xl pb-6">
             My role at <a class="link" href="https://www.fusemetrix.com" title="FuseMetrix" target="_blank">FuseMetrix</a> includes the maintenance and enhancement of the core system, as well as bespoke client systems. An
